@@ -19,5 +19,24 @@
 *.tar.gz
 *.rar
 
+# IDE files
+.idea/
+*.iml
+
+# Build folders
+target/
+build/
+out/
+dist/
+
+# App-specific folders
+data/
+
+# DS_Store
+.DS_Store
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+#properties
+application.properties
