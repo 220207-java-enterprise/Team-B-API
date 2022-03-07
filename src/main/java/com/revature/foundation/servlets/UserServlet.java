@@ -7,6 +7,7 @@ import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.requests.UpdateUserRequest;
 import com.revature.foundation.dtos.responses.*;
 import com.revature.foundation.models.AppUser;
+import com.revature.foundation.services.TokenService;
 import com.revature.foundation.services.UserService;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
 import com.revature.foundation.util.exceptions.ResourceConflictException;
@@ -24,11 +25,13 @@ import java.util.List;
 public class UserServlet extends HttpServlet {
 
     private final UserService userService;
+    private final TokenService tokenService;
     private final ObjectMapper mapper;
 
-    public UserServlet(UserService userService, ObjectMapper mapper) {
+    public UserServlet(UserService userService, ObjectMapper mapper, TokenService tokenService) {
         this.userService = userService;
         this.mapper = mapper;
+        this.tokenService = tokenService;
     }
 
     @Override

@@ -3,9 +3,11 @@ package com.revature.foundation.util;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.foundation.daos.ReimbursementDAO;
 import com.revature.foundation.daos.UserDAO;
+import com.revature.foundation.services.TokenService;
 import com.revature.foundation.services.UserService;
 import com.revature.foundation.services.ReimbursementService;
 import com.revature.foundation.servlets.*;
+import com.revature.foundation.util.auth.JwtConfig;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -20,7 +22,8 @@ public class ContextLoaderListener implements ServletContextListener {
 
         UserDAO userDAO = new UserDAO();
         UserService userService = new UserService(userDAO);
-        UserServlet userServlet = new UserServlet(userService,mapper);
+        TokenService tokenService = new TokenService(new JwtConfig());
+        UserServlet userServlet = new UserServlet(userService,mapper,tokenService);
 
         ReimbursementDAO reimbursementDAO = new ReimbursementDAO();
         ReimbursementService reimbursementService = new ReimbursementService(reimbursementDAO);
