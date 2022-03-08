@@ -2,7 +2,6 @@ package com.revature.foundation.servlets;
 
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.foundation.Temporary;
 import com.revature.foundation.dtos.requests.DeleteRequest;
 import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.requests.UpdateUserRequest;
@@ -30,19 +29,19 @@ public class UserServlet extends HttpServlet {
     private final UserService userService;
     private final TokenService tokenService;
     private final ObjectMapper mapper;
+    private final Logger logger;
 
-    private final Logger logger = LogManager.getLogger(Temporary.class);
-
-    public UserServlet(UserService userService, ObjectMapper mapper, TokenService tokenService) {
+    public UserServlet(UserService userService, ObjectMapper mapper, TokenService tokenService, Logger logger) {
         this.userService = userService;
         this.mapper = mapper;
         this.tokenService = tokenService;
+        this.logger = logger;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        logger.warn("Test warning.");
+        logger.debug("Test debug.");
 
         String[] reqFrags = req.getRequestURI().split("/");
         if (reqFrags.length == 4 && reqFrags[3].equals("availability")) {
