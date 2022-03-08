@@ -43,7 +43,6 @@ public class ContextLoaderListener implements ServletContextListener {
         context.addServlet("StatusServlet", statusServlet).addMapping("/stat_update");
         context.addServlet("TypeServlet", typeServlet).addMapping("/type_update");
         context.addServlet("MyReimbursementServlet", myReimbursementServlet).addMapping("/myreimb");
-
     }
 
     @Override
