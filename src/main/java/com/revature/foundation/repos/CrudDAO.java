@@ -1,6 +1,4 @@
-package com.revature.foundation.daos;
-
-import com.revature.foundation.models.Reimbursement;
+package com.revature.foundation.repos;
 
 import java.util.List;
 
