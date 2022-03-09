@@ -1,5 +1,7 @@
 package com.revature.foundation.models;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.util.Objects;
 
 // POJO = Plain Ol' Java Object
