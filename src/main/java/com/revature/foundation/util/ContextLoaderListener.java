@@ -8,6 +8,8 @@ import com.revature.foundation.services.UserService;
 import com.revature.foundation.services.ReimbursementService;
 import com.revature.foundation.servlets.*;
 import com.revature.foundation.util.auth.JwtConfig;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -19,11 +21,12 @@ public class ContextLoaderListener implements ServletContextListener {
         System.out.println("Initializing Foundation web application");
 
         ObjectMapper mapper = new ObjectMapper();
+        Logger logger = LogManager.getLogger("FileLogger");
 
         UserDAO userDAO = new UserDAO();
         UserService userService = new UserService(userDAO);
         TokenService tokenService = new TokenService(new JwtConfig());
-        UserServlet userServlet = new UserServlet(userService,mapper,tokenService);
+        UserServlet userServlet = new UserServlet(userService, mapper, tokenService, logger);
 
         ReimbursementDAO reimbursementDAO = new ReimbursementDAO();
         ReimbursementService reimbursementService = new ReimbursementService(reimbursementDAO);
@@ -43,7 +46,6 @@ public class ContextLoaderListener implements ServletContextListener {
         context.addServlet("StatusServlet", statusServlet).addMapping("/stat_update");
         context.addServlet("TypeServlet", typeServlet).addMapping("/type_update");
         context.addServlet("MyReimbursementServlet", myReimbursementServlet).addMapping("/myreimb");
-
     }
 
     @Override

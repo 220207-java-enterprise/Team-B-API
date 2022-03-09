@@ -11,6 +11,8 @@ import com.revature.foundation.services.TokenService;
 import com.revature.foundation.services.UserService;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
 import com.revature.foundation.util.exceptions.ResourceConflictException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,15 +29,19 @@ public class UserServlet extends HttpServlet {
     private final UserService userService;
     private final TokenService tokenService;
     private final ObjectMapper mapper;
+    private final Logger logger;
 
-    public UserServlet(UserService userService, ObjectMapper mapper, TokenService tokenService) {
+    public UserServlet(UserService userService, ObjectMapper mapper, TokenService tokenService, Logger logger) {
         this.userService = userService;
         this.mapper = mapper;
         this.tokenService = tokenService;
+        this.logger = logger;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        logger.debug("Test debug.");
 
         String[] reqFrags = req.getRequestURI().split("/");
         if (reqFrags.length == 4 && reqFrags[3].equals("availability")) {
