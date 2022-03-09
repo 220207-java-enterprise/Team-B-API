@@ -1,6 +1,6 @@
 # Plan of Action
 
-1. Make AppConfig
+1. Make AppDriver
 2. Refactor application.properties
 3. Annotate spring beans with stereotype annotations
 4. Create main driver class
