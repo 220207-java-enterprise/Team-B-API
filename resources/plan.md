@@ -4,3 +4,4 @@
 2. Annotate spring beans with stereotype annotations.
 3. Convert Models to Tables
 4. Replace DAOs with repos
+5. Replace Servlets with controllers
