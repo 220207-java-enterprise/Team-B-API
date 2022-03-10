@@ -1,10 +1,8 @@
 package com.revature.foundation.services;
 
-import com.revature.foundation.dtos.requests.ReimbursementRequest;
-import com.revature.foundation.dtos.requests.StatusUpdateRequest;
-import com.revature.foundation.dtos.requests.TypeUpdateRequest;
-import com.revature.foundation.dtos.requests.UpdateReimbursementRequest;
+import com.revature.foundation.dtos.requests.*;
 import com.revature.foundation.dtos.responses.ReimbursementResponse;
+import com.revature.foundation.dtos.responses.ResourceCreationResponse;
 import com.revature.foundation.models.Reimbursement;
 import com.revature.foundation.models.ReimbursementStatus;
 import com.revature.foundation.models.ReimbursementType;
@@ -13,6 +11,7 @@ import com.revature.foundation.repos.ReimbursementDAO;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -33,6 +32,50 @@ public class ReimbursementService {
                               .map(ReimbursementResponse::new)
                               .collect(Collectors.toList());
     }
+
+    public List<ReimbursementResponse> getByType(TypeFilterRequest typeFilterRequest){
+
+        String typeName = typeFilterRequest.getTypeName();
+
+        return reimbRepository.findByType(typeName)
+                .stream()
+                .map(ReimbursementResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<ReimbursementResponse> getByStatus(StatusFilterRequest statusFilterRequest){
+
+        String statusName = statusFilterRequest.getStatusName();
+
+        return reimbRepository.findByStatus(statusName)
+                .stream()
+                .map(ReimbursementResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<ReimbursementResponse> getByAuthor(ViewReimbursementRequest viewReimbursementRequest){
+
+        String authorId = viewReimbursementRequest.getAuthor_id();
+
+        return reimbRepository.findByAuthor(authorId)
+                .stream()
+                .map(ReimbursementResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public ResourceCreationResponse addReimbursement(ReimbursementRequest reimbursementRequest){
+        Reimbursement reimbursement = reimbursementRequest.extractReimbursement();
+        reimbursement.setId(UUID.randomUUID().toString());
+        reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
+        reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
+        reimbursement.setSubmitted(new Timestamp(System.currentTimeMillis()));
+
+        reimbRepository.save(reimbursement);
+
+        return new ResourceCreationResponse(reimbursement.getId());
+    }
+
+
 
 //    public List<ReimbursementResponse> getTypeReimbursements(String id){
 //        return reimbursementDAO.getByType(id).stream().map(ReimbursementResponse::new).collect(Collectors.toList());

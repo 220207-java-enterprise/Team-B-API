@@ -1,23 +1,27 @@
 package com.revature.foundation.dtos.requests;
 
 public class StatusFilterRequest {
-    private String status_id;
+    private String statusName;
 
     public StatusFilterRequest(){
         super();
     }
 
-    public StatusFilterRequest(String status_id){
-        this.status_id = status_id;
+    public StatusFilterRequest(String statusName){
+        this.statusName = statusName.toUpperCase();
     }
 
-    public String getStatus_id(){return status_id;}
-    public void setStatus_id(String status_id){this.status_id= status_id;}
+    public String getStatusName() {
+        return statusName;
+    }
 
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
+    }
 
     public String toString() {
         return "FilterRequest{" +
-                "status_id='" + status_id+ '\'' +
+                "status_id='" + statusName+ '\'' +
                 '}';
     }
 }
