@@ -1,8 +1,7 @@
 package com.revature.foundation.services;
 
 import com.revature.foundation.dtos.requests.*;
-import com.revature.foundation.dtos.responses.ReimbursementResponse;
-import com.revature.foundation.dtos.responses.ResourceCreationResponse;
+import com.revature.foundation.dtos.responses.*;
 import com.revature.foundation.models.Reimbursement;
 import com.revature.foundation.models.ReimbursementStatus;
 import com.revature.foundation.models.ReimbursementType;
@@ -73,6 +72,43 @@ public class ReimbursementService {
         reimbRepository.save(reimbursement);
 
         return new ResourceCreationResponse(reimbursement.getId());
+    }
+
+    public StatusUpdateResponse updateStatus(StatusUpdateRequest statusUpdateRequest){
+        Reimbursement reimbursement = reimbRepository.findByReimbId(statusUpdateRequest.getReimb_id());
+        if (statusUpdateRequest.getStatusName().equals("PENDING")){
+            reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
+        }
+        else if(statusUpdateRequest.getStatusName().equals("APPROVED")){
+            reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9f","APPROVED"));
+        }
+        else if(statusUpdateRequest.getStatusName().equals("DENIED")){
+            reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9g","DENIED"));
+        }
+        reimbursement.setResolved(new Timestamp(System.currentTimeMillis()));
+        reimbRepository.update_status(reimbursement.getReimbursementStatus().getId(),reimbursement.getResolved(),reimbursement.getId());
+        return new StatusUpdateResponse(reimbursement);
+    }
+
+    public TypeUpdateResponse updateType(TypeUpdateRequest typeUpdateRequest){
+        Reimbursement reimbursement = reimbRepository.findByReimbId(typeUpdateRequest.getReimb_id());
+        if (typeUpdateRequest.getTypeName().equals("OTHER")){
+           reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
+        }
+        else if(typeUpdateRequest.getTypeName().equals("FOOD")){
+            reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9c","FOOD"));
+        }
+        else if(typeUpdateRequest.getTypeName().equals("TRAVEL")){
+            reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9b","TRAVEL"));
+        }
+        else if(typeUpdateRequest.getTypeName().equals("LODGING")){
+            reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9a","LODGING"));
+        }
+
+        reimbursement.setResolved(new Timestamp(System.currentTimeMillis()));
+        reimbRepository.update_type(reimbursement.getReimbursementType().getId(),reimbursement.getResolved(),reimbursement.getId());
+        return new TypeUpdateResponse(reimbursement);
+
     }
 
 

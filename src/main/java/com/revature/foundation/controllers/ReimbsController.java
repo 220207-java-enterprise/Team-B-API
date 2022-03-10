@@ -3,9 +3,7 @@ package com.revature.foundation.controllers;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.foundation.dtos.requests.*;
-import com.revature.foundation.dtos.responses.ReimbursementResponse;
-import com.revature.foundation.dtos.responses.Principal;
-import com.revature.foundation.dtos.responses.ResourceCreationResponse;
+import com.revature.foundation.dtos.responses.*;
 import com.revature.foundation.models.Reimbursement;
 import com.revature.foundation.services.ReimbursementService;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
@@ -65,9 +63,14 @@ public class ReimbsController {
         return reimbursementService.addReimbursement(reimbursementRequest);
     }
 
-    @PutMapping(produces = "application/json", consumes = "application/json")
-    public ResourceCreationResponse updateReimb(@RequestBody ReimbursementRequest reimbursementRequest){
-        return null; //TODO
+    @PutMapping(produces = "application/json", consumes = "application/json", value = "/status")
+    public StatusUpdateResponse updateStatus(@RequestBody StatusUpdateRequest statusUpdateRequest){
+        return reimbursementService.updateStatus(statusUpdateRequest);
+    }
+
+    @PutMapping(produces = "application/json", consumes = "application/json", value = "/type")
+    public TypeUpdateResponse updateType(@RequestBody TypeUpdateRequest typeUpdateRequest){
+        return reimbursementService.updateType(typeUpdateRequest);
     }
 
     @ExceptionHandler
