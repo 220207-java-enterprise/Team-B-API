@@ -6,7 +6,6 @@ import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.requests.UpdateUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
 import com.revature.foundation.models.AppUser;
-import com.revature.foundation.daos.UserDAO;
 import com.revature.foundation.models.UserRole;
 import com.revature.foundation.repos.UserRepo;
 import com.revature.foundation.util.exceptions.AuthenticationException;
@@ -33,7 +32,7 @@ public class UserService {
 
 
         public List<AppUserResponse> getAllUsers() {
-            return userRepo.findAll()
+            return userRepo.findAllActive()
                     .stream()
                     .map(AppUserResponse::new)
                     .collect(Collectors.toList());
