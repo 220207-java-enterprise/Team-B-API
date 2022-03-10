@@ -1,11 +1,26 @@
 package com.revature.foundation.models;
 
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name="ers_reimbursement_types")
 public class ReimbursementType {
 
+    @Id
+    @Column(name = "type_id")
     private String id;
+
+    @Column(name = "type", unique = true, nullable = false)
     private String typeName;
+
+    @OneToMany(
+            mappedBy = "type",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL
+    )
+    private List<Reimbursement> reimbursements;
 
     public ReimbursementType() {
         super();
