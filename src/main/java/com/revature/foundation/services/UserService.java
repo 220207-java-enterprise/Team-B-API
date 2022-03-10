@@ -1,5 +1,6 @@
 package com.revature.foundation.services;
 
+import com.revature.foundation.dtos.requests.ApproveUserRequest;
 import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
 import com.revature.foundation.models.AppUser;
@@ -25,7 +26,6 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-
     public List<AppUserResponse> getAllUsers() {
         return userRepo.findAllActive()
                 .stream()
@@ -33,17 +33,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-        // Pre-Java 8 mapping logic (without Streams)
-//        List<AppUser> users = userDAO.getAll();
-//        List<AppUserResponse> userResponses = new ArrayList<>();
-//        for (AppUser user : users) {
-//            userResponses.add(new AppUserResponse(user));
-//        }
-//        return userResponses;
-
-        // Java 8+ mapping logic (with Streams)
-
-    public AppUser register(NewUserRequest newUserRequest) throws IOException {
+    public void register(NewUserRequest newUserRequest) throws IOException {
 
         AppUser newUser = newUserRequest.extractUser();
 
@@ -67,8 +57,10 @@ public class UserService {
         newUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc98", "EMPLOYEE")); // All newly registered users start as EMPLOYEE
         System.out.println(newUser);
         userRepo.save(newUser);
+    }
 
-        return newUser;
+    public void approve(ApproveUserRequest request) {
+        userRepo.approveUser(request.getId());
     }
 //
 //    public AppUser login(LoginRequest loginRequest) {

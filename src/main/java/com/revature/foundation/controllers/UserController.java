@@ -1,5 +1,6 @@
 package com.revature.foundation.controllers;
 
+import com.revature.foundation.dtos.requests.ApproveUserRequest;
 import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
 import com.revature.foundation.models.AppUser;
@@ -28,13 +29,18 @@ public class UserController {
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)//accepted because admin needs to approve request
-    @PostMapping(produces = "application/json", consumes = "application/json")
+    @PostMapping
     public void registerNewUser(@RequestBody NewUserRequest request) {
         try {
-            System.out.println(request);
-            AppUser createdUser = userService.register(request);
+            userService.register(request);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping(value = "approve")
+    public void approveUser(@RequestBody ApproveUserRequest request) {
+        userService.approve(request);
     }
 }
