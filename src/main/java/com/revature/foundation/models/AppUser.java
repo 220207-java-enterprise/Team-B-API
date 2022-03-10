@@ -1,118 +1,38 @@
 package com.revature.foundation.models;
 
-import java.util.Objects;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-// POJO = Plain Ol' Java Object
-// Contains NO BUSINESS LOGIC
-// Simple encapsulation of some domain object's states
+//TODO make sure this is correct syntax + implement getters/setters and toString
+
+@Entity
+@Table(name = "ERS_Users")
 public class AppUser {
 
+    @Id
+    @Column(name = "user_id")
     private String id;
+
+    @Column(name = "given_name", nullable = false)
     private String firstName;
+
+    @Column(name = "surname", nullable = false)
     private String lastName;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @Column//TODO implement validation
     private String username;
+
+    @Column//TODO implement validation
     private String password;
+
+    @Embedded//TODO should this be embedded?
     private UserRole role;
 
-    public AppUser() {
-        super();
-    }
-
-    public AppUser(String firstName, String lastName, String email, String username, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AppUser appUser = (AppUser) o;
-        return Objects.equals(id, appUser.id)
-                && Objects.equals(firstName, appUser.firstName)
-                && Objects.equals(lastName, appUser.lastName)
-                && Objects.equals(email, appUser.email)
-                && Objects.equals(username, appUser.username)
-                && Objects.equals(password, appUser.password)
-                && Objects.equals(role, appUser.role);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, firstName, lastName, email, username, password, role);
-    }
-
-    @Override
-    public String toString() {
-        return "AppUser{" +
-                "id='" + id + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", role=" + role +
-                '}';
-    }
 
 }
