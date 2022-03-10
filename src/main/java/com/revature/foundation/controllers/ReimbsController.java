@@ -65,6 +65,11 @@ public class ReimbsController {
         return reimbursementService.addReimbursement(reimbursementRequest);
     }
 
+    @PutMapping(produces = "application/json", consumes = "application/json")
+    public ResourceCreationResponse updateReimb(@RequestBody ReimbursementRequest reimbursementRequest){
+        return null; //TODO
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public HashMap<String, Object> handleInvalidRequests(InvalidRequestException e) {
