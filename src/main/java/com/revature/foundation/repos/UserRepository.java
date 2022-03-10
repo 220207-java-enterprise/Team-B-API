@@ -13,6 +13,10 @@ public interface UserRepository extends CrudRepository<AppUser, String> {
     @Query("from AppUser a where a.isActive = true")
     List<AppUser> findAllActive();
 
+    AppUser findByUsername(String username);
+
+    AppUser findByEmail(String email);
+
 
 
 //    //Using native SQL query
