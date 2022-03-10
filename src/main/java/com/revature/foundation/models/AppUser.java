@@ -1,11 +1,8 @@
 package com.revature.foundation.models;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import javax.persistence.Column;
+import javax.persistence.Id;
 
 @Entity
 @Table(name = "ERS_Users")

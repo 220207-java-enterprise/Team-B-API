@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepo extends CrudRepository<AppUser, String> {
+public interface UserRepository extends CrudRepository<AppUser, String> {
 
     @Query("from AppUser a where a.isActive = true")
     List<AppUser> findAllActive();

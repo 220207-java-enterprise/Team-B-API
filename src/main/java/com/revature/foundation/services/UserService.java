@@ -1,42 +1,29 @@
 package com.revature.foundation.services;
 
-import com.revature.foundation.dtos.requests.DeleteRequest;
-import com.revature.foundation.dtos.requests.LoginRequest;
-import com.revature.foundation.dtos.requests.NewUserRequest;
-import com.revature.foundation.dtos.requests.UpdateUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
-import com.revature.foundation.models.AppUser;
-import com.revature.foundation.models.UserRole;
-import com.revature.foundation.repos.UserRepo;
-import com.revature.foundation.util.exceptions.AuthenticationException;
-import com.revature.foundation.util.exceptions.InvalidRequestException;
-import com.revature.foundation.util.exceptions.ResourceConflictException;
+import com.revature.foundation.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
-        private UserRepo userRepo;
+    private UserRepository userRepo;
 
-        @Autowired
-        public UserService(UserRepo userRepo) {
-            this.userRepo = userRepo;
-        }
+    @Autowired
+    public UserService(UserRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
 
-        public List<AppUserResponse> getAllUsers() {
-            return userRepo.findAllActive()
-                    .stream()
-                    .map(AppUserResponse::new)
-                    .collect(Collectors.toList());
-        }
+    public List<AppUserResponse> getAllUsers() {
+        return userRepo.findAllActive()
+                .stream()
+                .map(AppUserResponse::new)
+                .collect(Collectors.toList());
+    }
 
         // Pre-Java 8 mapping logic (without Streams)
 //        List<AppUser> users = userDAO.getAll();

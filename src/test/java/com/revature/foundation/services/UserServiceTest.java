@@ -1,22 +1,16 @@
-//package com.revature.foundation.services;
-//
-//import com.revature.foundation.daos.UserDAO;
-//import com.revature.foundation.dtos.requests.LoginRequest;
-//import com.revature.foundation.dtos.requests.NewUserRequest;
-//import com.revature.foundation.models.AppUser;
-//import com.revature.foundation.models.UserRole;
-//import com.revature.foundation.util.exceptions.AuthenticationException;
-//import com.revature.foundation.util.exceptions.DataSourceException;
-//import com.revature.foundation.util.exceptions.InvalidRequestException;
-//import org.junit.*;
-//import org.mockito.Mockito;
-//
-//import java.sql.SQLException;
-//
-//import static org.junit.Assert.*;
-//import static org.mockito.Mockito.*;
-//
-//public class UserServiceTest {
+package com.revature.foundation.services;
+
+import com.revature.foundation.repos.UserDAO;
+import com.revature.foundation.dtos.requests.LoginRequest;
+import com.revature.foundation.models.AppUser;
+import com.revature.foundation.util.exceptions.AuthenticationException;
+import org.junit.*;
+import org.mockito.Mockito;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+public class UserServiceTest {
 //    private UserService sut; // sut = System Under Test
 //    private UserDAO mockUserDao = mock(UserDAO.class);
 //
@@ -114,11 +108,12 @@
 //        verify(mockUserDao, times(1)).findUserByUsernameAndPassword(loginRequest.getUsername(), loginRequest.getPassword());
 //
 //    }
-//
-//    // register tests
-//    // - confirm the positive case (valid user provided, no conflicts)
-//    // - given invalid user data (empty strings/null values)
-//    // - given valid user, but has conflict in datasource
-//
-//
-//}
+
+
+    // register tests
+    // - confirm the positive case (valid user provided, no conflicts)
+    // - given invalid user data (empty strings/null values)
+    // - given valid user, but has conflict in datasource
+
+
+}

@@ -1,18 +1,18 @@
-//package com.revature.foundation.daos;
-//
-//import com.revature.foundation.models.Reimbursement;
-//import com.revature.foundation.models.ReimbursementStatus;
-//import com.revature.foundation.models.ReimbursementType;
-//import com.revature.foundation.util.exceptions.DataSourceException;
-//import com.revature.foundation.util.exceptions.ResourcePersistenceException;
-//
-//import java.sql.*;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//
-//public class ReimbursementDAO implements CrudDAO <Reimbursement> {
-//
+package com.revature.foundation.repos;
+
+import com.revature.foundation.models.Reimbursement;
+import com.revature.foundation.models.ReimbursementStatus;
+import com.revature.foundation.models.ReimbursementType;
+import com.revature.foundation.util.exceptions.DataSourceException;
+import com.revature.foundation.util.exceptions.ResourcePersistenceException;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+// implements CrudDAO <Reimbursement>
+public class ReimbursementDAO {
+
 //    private final String rootSelect = "SELECT " +
 //            "ers.reimb_id, ers.amount, ers.desciption, ers.author_id, ers.resolver_id, ers.status_id, ers.type_id, rs.status, rt.type " +
 //            "FROM ers_reimbursements ers " +
@@ -296,4 +296,4 @@
 //        }
 //
 //    }
-//}
+}

@@ -1,25 +1,23 @@
-//
-//
-//package com.revature.foundation.controllers;
-//
-//import com.fasterxml.jackson.databind.DatabindException;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.revature.foundation.dtos.requests.LoginRequest;
-//import com.revature.foundation.dtos.responses.Principal;
-//import com.revature.foundation.services.UserService;
-//import com.revature.foundation.util.exceptions.AuthenticationException;
-//import com.revature.foundation.util.exceptions.InvalidRequestException;
-//
-//import javax.servlet.ServletException;
-//import javax.servlet.http.HttpServlet;
-//import javax.servlet.http.HttpServletRequest;
-//import javax.servlet.http.HttpServletResponse;
-//import javax.servlet.http.HttpSession;
-//import java.io.IOException;
-//import java.io.PrintWriter;
-//
-//public class AuthServlet extends HttpServlet {
-//
+package com.revature.foundation.controllers;
+
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.foundation.dtos.requests.LoginRequest;
+import com.revature.foundation.dtos.responses.Principal;
+import com.revature.foundation.services.UserService;
+import com.revature.foundation.util.exceptions.AuthenticationException;
+import com.revature.foundation.util.exceptions.InvalidRequestException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class AuthServlet extends HttpServlet {
+
 //    private final UserService userService;
 //    private final ObjectMapper mapper;
 //
@@ -57,5 +55,4 @@
 //            resp.setStatus(500);
 //        }
 //    }
-//
-//}
+}

@@ -1,17 +1,18 @@
-//package com.revature.foundation.daos;
-//
-//import com.revature.foundation.models.AppUser;
-//import com.revature.foundation.models.UserRole;
-//import com.revature.foundation.util.exceptions.DataSourceException;
-//import com.revature.foundation.util.exceptions.ResourcePersistenceException;
-//
-//import java.sql.*;
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//// TODO attempt to centralize exception handling in service layer
-//public class UserDAO implements CrudDAO<AppUser> {
-//
+package com.revature.foundation.repos;
+
+import com.revature.foundation.models.AppUser;
+import com.revature.foundation.models.UserRole;
+import com.revature.foundation.util.exceptions.DataSourceException;
+import com.revature.foundation.util.exceptions.ResourcePersistenceException;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+// TODO attempt to centralize exception handling in service layer
+// implements CrudDAO<AppUser>
+public class UserDAO  {
+
 //    private final String rootSelect = "SELECT " +
 //            "eu.user_id, eu.given_name, eu.surname, eu.email, eu.user_name, eu.password, eu.is_active, eu.role_id, eur.role " +
 //            "FROM ers_users eu " +
@@ -244,4 +245,4 @@
 //            throw new DataSourceException(e);
 //        }
 //    }
-//}
+}
