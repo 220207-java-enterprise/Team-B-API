@@ -109,6 +109,7 @@ public class UserServiceTest {
 //
 //    }
 
+
     // register tests
     // - confirm the positive case (valid user provided, no conflicts)
     // - given invalid user data (empty strings/null values)

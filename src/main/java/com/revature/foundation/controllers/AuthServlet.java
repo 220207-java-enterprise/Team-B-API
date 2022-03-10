@@ -1,5 +1,3 @@
-
-
 package com.revature.foundation.controllers;
 
 import com.fasterxml.jackson.databind.DatabindException;
@@ -57,5 +55,4 @@ public class AuthServlet extends HttpServlet {
 //            resp.setStatus(500);
 //        }
 //    }
-
 }
