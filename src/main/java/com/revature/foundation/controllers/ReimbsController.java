@@ -74,8 +74,8 @@ public class ReimbsController {
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json", value = "/employee")
-    public UpdateReimbursementResponse update(@RequestBody UpdateReimbursementRequest updateReimbursementRequest){
-        return reimbursementService.update(updateReimbursementRequest);
+    public UpdateReimbursementResponse updateReimb(@RequestBody UpdateReimbursementRequest updateReimbursementRequest){
+        return reimbursementService.updateReimb(updateReimbursementRequest);
     }
 
     @ExceptionHandler

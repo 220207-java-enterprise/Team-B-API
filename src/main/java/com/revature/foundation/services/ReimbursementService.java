@@ -111,18 +111,25 @@ public class ReimbursementService {
 
     }
 
-    public UpdateReimbursementResponse update(UpdateReimbursementRequest updateReimbursementRequest){
-        String id = updateReimbursementRequest.getId();
-        Reimbursement reimbursement = reimbRepository.findByReimbId(id);
+    public UpdateReimbursementResponse updateReimb(UpdateReimbursementRequest updateReimbursementRequest){
+
+        Reimbursement reimbursement = reimbRepository.findByReimbId(updateReimbursementRequest.getId());
+
         if(reimbursement.getReimbursementStatus().getStatusName().equals("PENDING")) {
-            if (updateReimbursementRequest.getAmount() >= 0.0) {
+            if (updateReimbursementRequest.getAmount() > 0.0) {
                 reimbursement.setAmount(updateReimbursementRequest.getAmount());
+            }
+            else{
+                reimbursement.setAmount(reimbursement.getAmount());
             }
             if (updateReimbursementRequest.getDescription() != null) {
                 reimbursement.setDescription(updateReimbursementRequest.getDescription());
             }
+            else {
+                reimbursement.setDescription(reimbursement.getDescription());
+            }
         }
-        reimbRepository.update(updateReimbursementRequest.getDescription(),updateReimbursementRequest.getAmount(),updateReimbursementRequest.getId());
+        reimbRepository.update(reimbursement.getDescription(), reimbursement.getAmount(), reimbursement.getId());
         return new UpdateReimbursementResponse(reimbursement);
     }
 
