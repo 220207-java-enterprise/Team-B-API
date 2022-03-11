@@ -82,8 +82,8 @@ public class ReimbsController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public HashMap<String, Object> handleInvalidRequests(InvalidRequestException e) {
         HashMap<String, Object> responseBody = new HashMap<>();
-        responseBody.put("status", 400);
-        responseBody.put("message", e.getMessage());
+        //responseBody.put("status", 400);
+        responseBody.put("message", e.getClass().getSimpleName() + ": " + e.getMessage());
         responseBody.put("timestamp", LocalDateTime.now());
         return responseBody;
     }

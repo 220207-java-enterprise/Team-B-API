@@ -7,8 +7,11 @@ import com.revature.foundation.models.ReimbursementStatus;
 import com.revature.foundation.models.ReimbursementType;
 import com.revature.foundation.repos.ReimbRepository;
 import com.revature.foundation.repos.ReimbursementDAO;
+import com.revature.foundation.util.exceptions.InvalidRequestException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.awt.dnd.InvalidDnDOperationException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -128,6 +131,9 @@ public class ReimbursementService {
             else {
                 reimbursement.setDescription(reimbursement.getDescription());
             }
+        }
+        else{
+            throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementStatus().getStatusName().toLowerCase());
         }
         reimbRepository.update(reimbursement.getDescription(), reimbursement.getAmount(), reimbursement.getId());
         return new UpdateReimbursementResponse(reimbursement);
