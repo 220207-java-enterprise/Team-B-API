@@ -2,19 +2,15 @@ package com.revature.foundation.controllers;
 
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.foundation.dtos.requests.ReimbursementRequest;
-import com.revature.foundation.dtos.requests.UpdateReimbursementRequest;
-import com.revature.foundation.dtos.responses.ReimbursementResponse;
-import com.revature.foundation.dtos.responses.Principal;
-import com.revature.foundation.dtos.responses.ResourceCreationResponse;
+import com.revature.foundation.dtos.requests.*;
+import com.revature.foundation.dtos.responses.*;
 import com.revature.foundation.models.Reimbursement;
 import com.revature.foundation.services.ReimbursementService;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
 import com.revature.foundation.util.exceptions.ResourceConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +19,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/reimbs")
@@ -39,6 +39,55 @@ public class ReimbsController {
     public List<ReimbursementResponse> getAllReimbs() {
         return reimbursementService.getAllReimbursements();
     }
+
+    @GetMapping(value = "/types/{type}", produces = "application/json")
+    public List<ReimbursementResponse> getByType(@PathVariable String type) {
+        TypeFilterRequest typeFilterRequest = new TypeFilterRequest(type);
+        return reimbursementService.getByType(typeFilterRequest);
+    }
+
+    @GetMapping(value = "/statuses/{status}", produces = "application/json")
+    public List<ReimbursementResponse> getByStatus(@PathVariable String status) {
+        StatusFilterRequest statusFilterRequest = new StatusFilterRequest(status);
+        return reimbursementService.getByStatus(statusFilterRequest);
+    }
+
+    @GetMapping(value = "/author/{authorId}", produces = "application/json")
+    public List<ReimbursementResponse> getByAuthor(@PathVariable String authorId) {
+        ViewReimbursementRequest viewReimbursementRequest = new ViewReimbursementRequest(authorId);
+        return reimbursementService.getByAuthor(viewReimbursementRequest);
+    }
+
+    @PostMapping(produces = "application/json", consumes = "application/json")
+    public ResourceCreationResponse addReimb(@RequestBody ReimbursementRequest reimbursementRequest){
+        return reimbursementService.addReimbursement(reimbursementRequest);
+    }
+
+    @PutMapping(produces = "application/json", consumes = "application/json", value = "/status")
+    public StatusUpdateResponse updateStatus(@RequestBody StatusUpdateRequest statusUpdateRequest){
+        return reimbursementService.updateStatus(statusUpdateRequest);
+    }
+
+    @PutMapping(produces = "application/json", consumes = "application/json", value = "/type")
+    public TypeUpdateResponse updateType(@RequestBody TypeUpdateRequest typeUpdateRequest){
+        return reimbursementService.updateType(typeUpdateRequest);
+    }
+
+    @PutMapping(produces = "application/json", consumes = "application/json", value = "/employee")
+    public UpdateReimbursementResponse updateReimb(@RequestBody UpdateReimbursementRequest updateReimbursementRequest){
+        return reimbursementService.updateReimb(updateReimbursementRequest);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public HashMap<String, Object> handleInvalidRequests(InvalidRequestException e) {
+        HashMap<String, Object> responseBody = new HashMap<>();
+        responseBody.put("status", 400);
+        responseBody.put("message", e.getMessage());
+        responseBody.put("timestamp", LocalDateTime.now());
+        return responseBody;
+    }
+
 }
 //public class ReimbursementServlet extends HttpServlet {
 //
