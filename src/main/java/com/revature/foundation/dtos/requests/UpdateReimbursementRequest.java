@@ -3,21 +3,21 @@ package com.revature.foundation.dtos.requests;
 import com.revature.foundation.models.Reimbursement;
 
 public class UpdateReimbursementRequest {
-    private double amount;
+    private float amount;
     private String description;
     private String id;
 
     public UpdateReimbursementRequest(){ super();}
 
-    public UpdateReimbursementRequest(double amount, String description,  String id){
+    public UpdateReimbursementRequest(float amount, String description,  String id){
         this.amount = amount;
         this.description = description;
         this.id = id;
     }
 
-    public double getAmount(){return amount;}
+    public float getAmount(){return amount;}
 
-    public void setAmount(double amount){this.amount = amount;}
+    public void setAmount(float amount){this.amount = amount;}
 
     public String getDescription(){return description;}
 
