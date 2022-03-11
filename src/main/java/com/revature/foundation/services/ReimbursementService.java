@@ -79,6 +79,9 @@ public class ReimbursementService {
 
     public StatusUpdateResponse updateStatus(StatusUpdateRequest statusUpdateRequest){
         Reimbursement reimbursement = reimbRepository.findByReimbId(statusUpdateRequest.getReimb_id());
+        if (statusUpdateRequest.getStatusName().equals(reimbursement.getReimbursementStatus().getStatusName())){
+            throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementStatus().getStatusName().toLowerCase());
+        }
         if (statusUpdateRequest.getStatusName().equals("PENDING")){
             reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
         }
@@ -95,6 +98,9 @@ public class ReimbursementService {
 
     public TypeUpdateResponse updateType(TypeUpdateRequest typeUpdateRequest){
         Reimbursement reimbursement = reimbRepository.findByReimbId(typeUpdateRequest.getReimb_id());
+        if (typeUpdateRequest.getTypeName().equals(reimbursement.getReimbursementType().getTypeName())){
+            throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementType().getTypeName().toLowerCase());
+        }
         if (typeUpdateRequest.getTypeName().equals("OTHER")){
            reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
         }
