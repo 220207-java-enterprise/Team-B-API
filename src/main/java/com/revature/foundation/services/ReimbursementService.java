@@ -111,6 +111,21 @@ public class ReimbursementService {
 
     }
 
+    public UpdateReimbursementResponse update(UpdateReimbursementRequest updateReimbursementRequest){
+        String id = updateReimbursementRequest.getId();
+        Reimbursement reimbursement = reimbRepository.findByReimbId(id);
+        if(reimbursement.getReimbursementStatus().getStatusName().equals("PENDING")) {
+            if (updateReimbursementRequest.getAmount() >= 0.0) {
+                reimbursement.setAmount(updateReimbursementRequest.getAmount());
+            }
+            if (updateReimbursementRequest.getDescription() != null) {
+                reimbursement.setDescription(updateReimbursementRequest.getDescription());
+            }
+        }
+        reimbRepository.update(updateReimbursementRequest.getDescription(),updateReimbursementRequest.getAmount(),updateReimbursementRequest.getId());
+        return new UpdateReimbursementResponse(reimbursement);
+    }
+
 
 
 //    public List<ReimbursementResponse> getTypeReimbursements(String id){

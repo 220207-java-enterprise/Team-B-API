@@ -34,6 +34,11 @@ public interface ReimbRepository extends CrudRepository<Reimbursement, String> {
     @Query(value = "UPDATE ers_reimbursements " + "SET type_id = ?1, "+ "resolved = ?2 "+ "WHERE reimb_id = ?3", nativeQuery = true)
     void update_type(String type_id, Timestamp resolved, String reimb_id);
 
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE ers_reimbursements " + "SET description = ?1, "+ "amount = ?2 "+ "WHERE reimb_id = ?3", nativeQuery = true)
+    void update(String description, float amount, String reimb_id);
+
     @Query("from Reimbursement r where r.id = ?1")
     Reimbursement findByReimbId(String id);
 }
