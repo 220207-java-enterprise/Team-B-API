@@ -18,7 +18,7 @@ public class StatusUpdateRequest {
     }
 
     public void setStatusName(String statusName) {
-        this.statusName = statusName;
+        this.statusName = statusName.toUpperCase();
     }
 
     public String getReimb_id() {
