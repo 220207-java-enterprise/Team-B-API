@@ -1,11 +1,14 @@
 package com.revature.foundation.services;
 
 import com.revature.foundation.dtos.requests.ApproveUserRequest;
+import com.revature.foundation.dtos.requests.LoginRequest;
 import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
+import com.revature.foundation.dtos.responses.Principal;
 import com.revature.foundation.models.AppUser;
 import com.revature.foundation.models.UserRole;
 import com.revature.foundation.repos.UserRepository;
+import com.revature.foundation.util.exceptions.AuthenticationException;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
 import com.revature.foundation.util.exceptions.ResourceConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,12 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private UserRepository userRepo;
+    private TokenService tokenService;
 
     @Autowired
-    public UserService(UserRepository userRepo) {
+    public UserService(UserRepository userRepo, TokenService tokenService) {
         this.userRepo = userRepo;
+        this.tokenService = tokenService;
     }
 
     public List<AppUserResponse> getAllUsers() {
@@ -33,11 +38,13 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void register(NewUserRequest newUserRequest) throws IOException {
+    public void register(NewUserRequest newUserRequest) {
 
         AppUser newUser = newUserRequest.extractUser();
 
-        if (isUserValid(newUser)) {
+        System.out.println(newUser.getEmail());
+
+        if (!isUserValid(newUser)) {
             throw new InvalidRequestException("Bad registration details given.");
         }
 
@@ -57,6 +64,23 @@ public class UserService {
         newUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc98", "EMPLOYEE")); // All newly registered users start as EMPLOYEE
         System.out.println(newUser);
         userRepo.save(newUser);
+    }
+
+    public String login(LoginRequest request) {
+        String username = request.getUsername();
+        String password = request.getPassword();
+
+        if (!isUsernameValid(username) || !(isPasswordValid(password)))
+            throw new InvalidRequestException("Invalid credentials given.");
+
+        AppUser authUser =  userRepo.findByUsername(request.getUsername());
+        if (authUser.equals(null))
+            throw new AuthenticationException();
+
+        // TODO: Authenticate password
+
+        Principal principal = new Principal(authUser);
+        return tokenService.generateToken(principal);
     }
 
     public void approve(ApproveUserRequest request) {
@@ -148,8 +172,7 @@ public class UserService {
             return false;
         }
 
-        // Passwords require a minimum eight characters, at least one uppercase letter, one lowercase
-        // letter, one number and one special character
+        // Password is between 8 and 25 characters
         if (!isPasswordValid(appUser.getPassword())) {
             return false;
         }
@@ -161,7 +184,10 @@ public class UserService {
 
     public boolean isEmailValid(String email) {
         if (email == null) return false;
-        return email.matches("^[^@\\s]+@[^@\\s.]+\\.[^@.\\s]+$\n");
+
+        System.out.println("isEmailValid: " + email.matches("^[^@\\s]+@[^@\\s.]+\\.[^@.\\s]+$"));
+
+        return email.matches("^[^@\\s]+@[^@\\s.]+\\.[^@.\\s]+$");
     }
 
     public boolean isUsernameValid(String username) {
@@ -170,7 +196,7 @@ public class UserService {
     }
 
     public boolean isPasswordValid(String password) {
-        return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
+        return password.matches("^[^\\s]{8,25}");
     }
 
     public boolean isUsernameAvailable(String username) {

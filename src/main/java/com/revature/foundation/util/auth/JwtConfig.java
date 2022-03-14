@@ -1,6 +1,7 @@
 package com.revature.foundation.util.auth;
 
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.security.Key;
 import java.util.Properties;
 
+@Component
 public class JwtConfig {
 
     private String salt; // use a Properties file instead
