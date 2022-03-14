@@ -62,6 +62,11 @@ public class UserService {
     public void register(NewUserRequest newUserRequest) {
 
         AppUser newUser = newUserRequest.extractUser();
+        if (newUserRequest.getRole() != null)
+            newUser.setRole(new UserRole(newUserRequest.getRole()));
+        else
+            // if no role provided in request, user is employee
+            newUser.setRole(new UserRole("EMPLOYEE"));
 
         System.out.println(newUser.getEmail());
 
@@ -84,7 +89,8 @@ public class UserService {
         );
 
         newUser.setId(UUID.randomUUID().toString());
-        newUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc98", "EMPLOYEE")); // All newly registered users start as EMPLOYEE
+        //users are automatically instantiated as false(rather than NULL)
+        newUser.setActive(false);
         System.out.println(newUser);
         userRepo.save(newUser);
     }
