@@ -11,6 +11,7 @@ import com.revature.foundation.repos.UserRepository;
 import com.revature.foundation.util.exceptions.AuthenticationException;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
 import com.revature.foundation.util.exceptions.ResourceConflictException;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,27 @@ public class UserService {
         this.tokenService = tokenService;
     }
 
-    public List<AppUserResponse> getAllUsers() {
+    public List<AppUserResponse> getAllUsers(String token, HttpServletResponse response) {
+        Principal principal = tokenService.extractRequesterDetails(token);
+        if (!principal.getRole().equals("ADMIN")) {
+            response.setStatus(403);
+            return null;
+        }
+
         return userRepo.findAllActive()
+                .stream()
+                .map(AppUserResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<AppUserResponse> getAllInactiveUsers(String token, HttpServletResponse response) {
+        Principal principal = tokenService.extractRequesterDetails(token);
+        if (!principal.getRole().equals("ADMIN")) {
+            response.setStatus(403);
+            return null;
+        }
+
+        return userRepo.findAllInactive()
                 .stream()
                 .map(AppUserResponse::new)
                 .collect(Collectors.toList());
@@ -59,7 +79,9 @@ public class UserService {
             throw new ResourceConflictException(msg);
         }
 
-        // TODO encrypt provided password before storing in the database
+        newUser.setPassword(
+                BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt(10))
+        );
 
         newUser.setId(UUID.randomUUID().toString());
         newUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc98", "EMPLOYEE")); // All newly registered users start as EMPLOYEE
