@@ -30,8 +30,25 @@ public class UserController {
     }
 
     @GetMapping
-    public List<AppUserResponse> getAllUsers()  {
-        return userService.getAllUsers();
+    public List<AppUserResponse> getAllUsers(HttpServletRequest request, HttpServletResponse response)  {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+
+        return userService.getAllUsers(token, response);
+    }
+
+    @GetMapping("inactive")
+    public List<AppUserResponse> getAllInactiveUsers(HttpServletRequest request, HttpServletResponse response)  {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+
+        return userService.getAllInactiveUsers(token, response);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)//accepted because admin needs to approve request
