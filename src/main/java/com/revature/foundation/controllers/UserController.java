@@ -6,6 +6,7 @@ import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
 import com.revature.foundation.models.AppUser;
 import com.revature.foundation.services.UserService;
+import com.revature.foundation.util.exceptions.InvalidRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -53,5 +56,14 @@ public class UserController {
 
         response.setStatus(201);
         userService.approve(token, approveRequest, response);
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public HashMap<String, Object> handleExceptions(RuntimeException e) {
+        HashMap<String, Object> responseBody = new HashMap<>();
+        responseBody.put("message", e.getClass().getSimpleName() + ": " + e.getMessage());
+        responseBody.put("timestamp", LocalDateTime.now());
+        return responseBody;
     }
 }
