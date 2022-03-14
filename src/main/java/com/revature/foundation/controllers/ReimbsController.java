@@ -36,46 +36,86 @@ public class ReimbsController {
     }
 
     @GetMapping
-    public List<ReimbursementResponse> getAllReimbs() {
-        return reimbursementService.getAllReimbursements();
+    public List<ReimbursementResponse> getAllReimbs(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+        return reimbursementService.getAllReimbursements(token,response);
     }
 
     @GetMapping(value = "/types/{type}", produces = "application/json")
-    public List<ReimbursementResponse> getByType(@PathVariable String type) {
+    public List<ReimbursementResponse> getByType(@PathVariable String type, HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
         TypeFilterRequest typeFilterRequest = new TypeFilterRequest(type);
-        return reimbursementService.getByType(typeFilterRequest);
+        return reimbursementService.getByType(typeFilterRequest,token,response);
     }
 
     @GetMapping(value = "/statuses/{status}", produces = "application/json")
-    public List<ReimbursementResponse> getByStatus(@PathVariable String status) {
+    public List<ReimbursementResponse> getByStatus(@PathVariable String status, HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
         StatusFilterRequest statusFilterRequest = new StatusFilterRequest(status);
-        return reimbursementService.getByStatus(statusFilterRequest);
+        return reimbursementService.getByStatus(statusFilterRequest, token, response);
     }
 
-    @GetMapping(value = "/author/{authorId}", produces = "application/json")
-    public List<ReimbursementResponse> getByAuthor(@PathVariable String authorId) {
-        ViewReimbursementRequest viewReimbursementRequest = new ViewReimbursementRequest(authorId);
-        return reimbursementService.getByAuthor(viewReimbursementRequest);
+    @GetMapping(value = "/author", produces = "application/json")
+    public List<ReimbursementResponse> getByAuthor(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+
+        return reimbursementService.getByAuthor(token, response);
     }
 
     @PostMapping(produces = "application/json", consumes = "application/json")
-    public ResourceCreationResponse addReimb(@RequestBody ReimbursementRequest reimbursementRequest){
-        return reimbursementService.addReimbursement(reimbursementRequest);
+    public ResourceCreationResponse addReimb(@RequestBody ReimbursementRequest reimbursementRequest, HttpServletRequest request, HttpServletResponse response){
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+        return reimbursementService.addReimbursement(reimbursementRequest, token, response);
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json", value = "/status")
-    public StatusUpdateResponse updateStatus(@RequestBody StatusUpdateRequest statusUpdateRequest){
-        return reimbursementService.updateStatus(statusUpdateRequest);
+    public StatusUpdateResponse updateStatus(@RequestBody StatusUpdateRequest statusUpdateRequest, HttpServletRequest request, HttpServletResponse response){
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+        return reimbursementService.updateStatus(statusUpdateRequest, token, response);
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json", value = "/type")
-    public TypeUpdateResponse updateType(@RequestBody TypeUpdateRequest typeUpdateRequest){
-        return reimbursementService.updateType(typeUpdateRequest);
+    public TypeUpdateResponse updateType(@RequestBody TypeUpdateRequest typeUpdateRequest, HttpServletRequest request, HttpServletResponse response){
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+        return reimbursementService.updateType(typeUpdateRequest, token, response);
     }
 
     @PutMapping(produces = "application/json", consumes = "application/json", value = "/employee")
-    public UpdateReimbursementResponse updateReimb(@RequestBody UpdateReimbursementRequest updateReimbursementRequest){
-        return reimbursementService.updateReimb(updateReimbursementRequest);
+    public UpdateReimbursementResponse updateReimb(@RequestBody UpdateReimbursementRequest updateReimbursementRequest, HttpServletRequest request, HttpServletResponse response){
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+        return reimbursementService.updateReimb(updateReimbursementRequest, token, response);
     }
 
     @ExceptionHandler

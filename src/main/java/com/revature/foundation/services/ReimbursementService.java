@@ -10,6 +10,7 @@ import com.revature.foundation.repos.ReimbursementDAO;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.dnd.InvalidDnDOperationException;
 import java.io.IOException;
@@ -23,19 +24,37 @@ import java.util.stream.Collectors;
 public class ReimbursementService {
 
     private ReimbRepository reimbRepository;
+    private TokenService tokenService;
 
-    public ReimbursementService(ReimbRepository reimbRepository) {
+    public ReimbursementService(ReimbRepository reimbRepository, TokenService tokenService) {
         this.reimbRepository = reimbRepository;
+        this.tokenService = tokenService;
     }
 
-    public List<ReimbursementResponse> getAllReimbursements(){
+    public List<ReimbursementResponse> getAllReimbursements(String token, HttpServletResponse response){
+
+        Principal principal = tokenService.extractRequesterDetails(token);
+
+        if (!(principal.getRole().equals("FINANCE MANAGER"))){
+            response.setStatus(403);
+            return null;
+        }
+
         return reimbRepository.findAll()
                               .stream()
                               .map(ReimbursementResponse::new)
                               .collect(Collectors.toList());
     }
 
-    public List<ReimbursementResponse> getByType(TypeFilterRequest typeFilterRequest){
+    public List<ReimbursementResponse> getByType(TypeFilterRequest typeFilterRequest, String token, HttpServletResponse response){
+
+        Principal principal = tokenService.extractRequesterDetails(token);
+
+        if (!(principal.getRole().equals("FINANCE MANAGER"))){
+            response.setStatus(403);
+            return null;
+        }
+
 
         String typeName = typeFilterRequest.getTypeName();
 
@@ -45,7 +64,14 @@ public class ReimbursementService {
                 .collect(Collectors.toList());
     }
 
-    public List<ReimbursementResponse> getByStatus(StatusFilterRequest statusFilterRequest){
+    public List<ReimbursementResponse> getByStatus(StatusFilterRequest statusFilterRequest, String token, HttpServletResponse response){
+
+        Principal principal = tokenService.extractRequesterDetails(token);
+
+        if (!(principal.getRole().equals("FINANCE MANAGER"))){
+            response.setStatus(403);
+            return null;
+        }
 
         String statusName = statusFilterRequest.getStatusName();
 
@@ -55,9 +81,15 @@ public class ReimbursementService {
                 .collect(Collectors.toList());
     }
 
-    public List<ReimbursementResponse> getByAuthor(ViewReimbursementRequest viewReimbursementRequest){
+    public List<ReimbursementResponse> getByAuthor(String token, HttpServletResponse response){
 
-        String authorId = viewReimbursementRequest.getAuthor_id();
+        Principal principal = tokenService.extractRequesterDetails(token);
+
+        if (!(principal.getRole().equals("EMPLOYEE"))){
+            response.setStatus(403);
+            return null;
+        }
+        String authorId = principal.getId();
 
         return reimbRepository.findByAuthor(authorId)
                 .stream()
@@ -65,7 +97,13 @@ public class ReimbursementService {
                 .collect(Collectors.toList());
     }
 
-    public ResourceCreationResponse addReimbursement(ReimbursementRequest reimbursementRequest){
+    public ResourceCreationResponse addReimbursement(ReimbursementRequest reimbursementRequest, String token, HttpServletResponse response){
+        Principal principal = tokenService.extractRequesterDetails(token);
+
+        if (!(principal.getRole().equals("EMPLOYEE"))){
+            response.setStatus(403);
+            return null;
+        }
         Reimbursement reimbursement = reimbursementRequest.extractReimbursement();
         reimbursement.setId(UUID.randomUUID().toString());
         reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
@@ -77,7 +115,13 @@ public class ReimbursementService {
         return new ResourceCreationResponse(reimbursement.getId());
     }
 
-    public StatusUpdateResponse updateStatus(StatusUpdateRequest statusUpdateRequest){
+    public StatusUpdateResponse updateStatus(StatusUpdateRequest statusUpdateRequest, String token, HttpServletResponse response){
+        Principal principal = tokenService.extractRequesterDetails(token);
+
+        if (!(principal.getRole().equals("FINANCE MANAGER"))){
+            response.setStatus(403);
+            return null;
+        }
         Reimbursement reimbursement = reimbRepository.findByReimbId(statusUpdateRequest.getReimb_id());
         if (statusUpdateRequest.getStatusName().equals(reimbursement.getReimbursementStatus().getStatusName())){
             throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementStatus().getStatusName().toLowerCase());
@@ -96,7 +140,13 @@ public class ReimbursementService {
         return new StatusUpdateResponse(reimbursement);
     }
 
-    public TypeUpdateResponse updateType(TypeUpdateRequest typeUpdateRequest){
+    public TypeUpdateResponse updateType(TypeUpdateRequest typeUpdateRequest, String token, HttpServletResponse response){
+        Principal principal = tokenService.extractRequesterDetails(token);
+
+        if (!(principal.getRole().equals("FINANCE MANAGER"))){
+            response.setStatus(403);
+            return null;
+        }
         Reimbursement reimbursement = reimbRepository.findByReimbId(typeUpdateRequest.getReimb_id());
         if (typeUpdateRequest.getTypeName().equals(reimbursement.getReimbursementType().getTypeName())){
             throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementType().getTypeName().toLowerCase());
@@ -120,7 +170,14 @@ public class ReimbursementService {
 
     }
 
-    public UpdateReimbursementResponse updateReimb(UpdateReimbursementRequest updateReimbursementRequest){
+    public UpdateReimbursementResponse updateReimb(UpdateReimbursementRequest updateReimbursementRequest, String token, HttpServletResponse response){
+
+        Principal principal = tokenService.extractRequesterDetails(token);
+
+        if (!(principal.getRole().equals("EMPLOYEE"))){
+            response.setStatus(403);
+            return null;
+        }
 
         Reimbursement reimbursement = reimbRepository.findByReimbId(updateReimbursementRequest.getId());
 
