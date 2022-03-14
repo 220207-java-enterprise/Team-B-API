@@ -21,7 +21,7 @@ public class TypeUpdateRequest {
     }
 
     public String getTypeName() {
-        return typeName;
+        return typeName.toUpperCase();
     }
 
     public void setTypeName(String typeName) {

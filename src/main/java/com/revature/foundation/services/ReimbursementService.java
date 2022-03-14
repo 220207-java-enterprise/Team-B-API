@@ -7,8 +7,11 @@ import com.revature.foundation.models.ReimbursementStatus;
 import com.revature.foundation.models.ReimbursementType;
 import com.revature.foundation.repos.ReimbRepository;
 import com.revature.foundation.repos.ReimbursementDAO;
+import com.revature.foundation.util.exceptions.InvalidRequestException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.awt.dnd.InvalidDnDOperationException;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -76,6 +79,9 @@ public class ReimbursementService {
 
     public StatusUpdateResponse updateStatus(StatusUpdateRequest statusUpdateRequest){
         Reimbursement reimbursement = reimbRepository.findByReimbId(statusUpdateRequest.getReimb_id());
+        if (statusUpdateRequest.getStatusName().equals(reimbursement.getReimbursementStatus().getStatusName())){
+            throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementStatus().getStatusName().toLowerCase());
+        }
         if (statusUpdateRequest.getStatusName().equals("PENDING")){
             reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
         }
@@ -92,6 +98,9 @@ public class ReimbursementService {
 
     public TypeUpdateResponse updateType(TypeUpdateRequest typeUpdateRequest){
         Reimbursement reimbursement = reimbRepository.findByReimbId(typeUpdateRequest.getReimb_id());
+        if (typeUpdateRequest.getTypeName().equals(reimbursement.getReimbursementType().getTypeName())){
+            throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementType().getTypeName().toLowerCase());
+        }
         if (typeUpdateRequest.getTypeName().equals("OTHER")){
            reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
         }
@@ -128,6 +137,9 @@ public class ReimbursementService {
             else {
                 reimbursement.setDescription(reimbursement.getDescription());
             }
+        }
+        else{
+            throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementStatus().getStatusName().toLowerCase());
         }
         reimbRepository.update(reimbursement.getDescription(), reimbursement.getAmount(), reimbursement.getId());
         return new UpdateReimbursementResponse(reimbursement);
