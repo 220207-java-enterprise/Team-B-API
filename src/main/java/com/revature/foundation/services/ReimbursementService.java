@@ -106,6 +106,7 @@ public class ReimbursementService {
         }
         Reimbursement reimbursement = reimbursementRequest.extractReimbursement();
         reimbursement.setId(UUID.randomUUID().toString());
+        reimbursement.setAuthor_id(principal.getId());
         reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
         reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
         reimbursement.setSubmitted(new Timestamp(System.currentTimeMillis()));
