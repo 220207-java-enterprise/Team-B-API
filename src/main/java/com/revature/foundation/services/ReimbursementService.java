@@ -6,15 +6,10 @@ import com.revature.foundation.models.Reimbursement;
 import com.revature.foundation.models.ReimbursementStatus;
 import com.revature.foundation.models.ReimbursementType;
 import com.revature.foundation.repos.ReimbRepository;
-import com.revature.foundation.repos.ReimbursementDAO;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
-import java.awt.dnd.InvalidDnDOperationException;
-import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
