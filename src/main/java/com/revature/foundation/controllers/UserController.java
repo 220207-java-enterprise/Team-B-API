@@ -43,9 +43,15 @@ public class UserController {
         response.setHeader("Authorization", token);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
     @PutMapping(value = "approve")
-    public void approveUser(@RequestBody ApproveUserRequest request) {
-        userService.approve(request);
+    public void approveUser(@RequestBody ApproveUserRequest approveRequest, HttpServletRequest httpRequest, HttpServletResponse response) {
+        String token = httpRequest.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return;
+        }
+
+        response.setStatus(201);
+        userService.approve(token, approveRequest, response);
     }
 }

@@ -14,6 +14,7 @@ import com.revature.foundation.util.exceptions.ResourceConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -74,7 +75,7 @@ public class UserService {
             throw new InvalidRequestException("Invalid credentials given.");
 
         AppUser authUser =  userRepo.findByUsername(request.getUsername());
-        if (authUser.equals(null))
+        if (authUser == null)
             throw new AuthenticationException();
 
         // TODO: Authenticate password
@@ -83,30 +84,15 @@ public class UserService {
         return tokenService.generateToken(principal);
     }
 
-    public void approve(ApproveUserRequest request) {
+    public void approve(String token, ApproveUserRequest request, HttpServletResponse response) {
+        Principal principal = tokenService.extractRequesterDetails(token);
+        if (!principal.getRole().equals("ADMIN")) {
+            response.setStatus(403);
+            return;
+        }
+
         userRepo.approveUser(request.getId());
     }
-//
-//    public AppUser login(LoginRequest loginRequest) {
-//
-//        String username = loginRequest.getUsername();
-//        String password = loginRequest.getPassword();
-//
-//        //if (!isUsernameValid(username) || !isPasswordValid(password)) {
-//            //throw new InvalidRequestException("Invalid credentials provided!");
-//        //}
-//
-//        // TODO encrypt provided password (assumes password encryption is in place) to see if it matches what is in the DB
-//
-//        AppUser authUser = userDAO.findUserByUsernameAndPassword(username, password);
-//
-//        if (authUser == null) {
-//            throw new AuthenticationException();
-//        }
-//
-//        return authUser;
-//
-//    }
 //
 //    public AppUser delete(DeleteRequest deleteRequest){
 //        String id = deleteRequest.getId();
