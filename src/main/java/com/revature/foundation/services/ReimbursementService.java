@@ -106,6 +106,7 @@ public class ReimbursementService {
         }
         Reimbursement reimbursement = reimbursementRequest.extractReimbursement();
         reimbursement.setId(UUID.randomUUID().toString());
+        reimbursement.setAuthor_id(principal.getId());
         reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
         reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
         reimbursement.setSubmitted(new Timestamp(System.currentTimeMillis()));
@@ -135,6 +136,7 @@ public class ReimbursementService {
         else if(statusUpdateRequest.getStatusName().equals("DENIED")){
             reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9g","DENIED"));
         }
+        reimbursement.setResolver_id(principal.getId());
         reimbursement.setResolved(new Timestamp(System.currentTimeMillis()));
         reimbRepository.update_status(reimbursement.getReimbursementStatus().getId(),reimbursement.getResolved(),reimbursement.getId());
         return new StatusUpdateResponse(reimbursement);
@@ -164,6 +166,7 @@ public class ReimbursementService {
             reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9a","LODGING"));
         }
 
+        reimbursement.setResolver_id(principal.getId());
         reimbursement.setResolved(new Timestamp(System.currentTimeMillis()));
         reimbRepository.update_type(reimbursement.getReimbursementType().getId(),reimbursement.getResolved(),reimbursement.getId());
         return new TypeUpdateResponse(reimbursement);
