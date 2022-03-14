@@ -5,9 +5,11 @@ import com.revature.foundation.util.auth.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Service
 public class TokenService {
     private final JwtConfig jwtConfig;
 
@@ -47,7 +49,5 @@ public class TokenService {
             e.printStackTrace();
             return null;
         }
-
-
     }
 }

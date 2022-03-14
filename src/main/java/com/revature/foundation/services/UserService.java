@@ -1,22 +1,36 @@
 package com.revature.foundation.services;
 
+import com.revature.foundation.dtos.requests.ApproveUserRequest;
+import com.revature.foundation.dtos.requests.LoginRequest;
+import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
+import com.revature.foundation.dtos.responses.Principal;
+import com.revature.foundation.models.AppUser;
+import com.revature.foundation.models.UserRole;
 import com.revature.foundation.repos.UserRepository;
+import com.revature.foundation.util.exceptions.AuthenticationException;
+import com.revature.foundation.util.exceptions.InvalidRequestException;
+import com.revature.foundation.util.exceptions.ResourceConflictException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 public class UserService {
 
     private UserRepository userRepo;
+    private TokenService tokenService;
 
     @Autowired
-    public UserService(UserRepository userRepo) {
+    public UserService(UserRepository userRepo, TokenService tokenService) {
         this.userRepo = userRepo;
+        this.tokenService = tokenService;
     }
-
 
     public List<AppUserResponse> getAllUsers() {
         return userRepo.findAllActive()
@@ -25,63 +39,60 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-        // Pre-Java 8 mapping logic (without Streams)
-//        List<AppUser> users = userDAO.getAll();
-//        List<AppUserResponse> userResponses = new ArrayList<>();
-//        for (AppUser user : users) {
-//            userResponses.add(new AppUserResponse(user));
-//        }
-//        return userResponses;
+    public void register(NewUserRequest newUserRequest) {
 
-        // Java 8+ mapping logic (with Streams)
+        AppUser newUser = newUserRequest.extractUser();
 
-//    public AppUser register(NewUserRequest newUserRequest) throws IOException {
-//
-//        AppUser newUser = newUserRequest.extractUser();
-//
-//        if (isUserValid(newUser)) {
-//            throw new InvalidRequestException("Bad registration details given.");
-//        }
-//
-//        boolean usernameAvailable = isUsernameAvailable(newUser.getUsername());
-//        boolean emailAvailable = isEmailAvailable(newUser.getEmail());
-//
-//        if (!usernameAvailable || !emailAvailable) {
-//            String msg = "The values provided for the following fields are already taken by other users: ";
-//            if (!usernameAvailable) msg += "user_name";
-//            if (!emailAvailable) msg += "email";
-//            throw new ResourceConflictException(msg);
-//        }
-//
-//        // TODO encrypt provided password before storing in the database
-//
-//        newUser.setId(UUID.randomUUID().toString());
-//        newUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc98", "EMPLOYEE")); // All newly registered users start as EMPLOYEE
-//        userDAO.save(newUser);
-//
-//        return newUser;
-//    }
-//
-//    public AppUser login(LoginRequest loginRequest) {
-//
-//        String username = loginRequest.getUsername();
-//        String password = loginRequest.getPassword();
-//
-//        //if (!isUsernameValid(username) || !isPasswordValid(password)) {
-//            //throw new InvalidRequestException("Invalid credentials provided!");
-//        //}
-//
-//        // TODO encrypt provided password (assumes password encryption is in place) to see if it matches what is in the DB
-//
-//        AppUser authUser = userDAO.findUserByUsernameAndPassword(username, password);
-//
-//        if (authUser == null) {
-//            throw new AuthenticationException();
-//        }
-//
-//        return authUser;
-//
-//    }
+        System.out.println(newUser.getEmail());
+
+        if (!isUserValid(newUser)) {
+            throw new InvalidRequestException("Bad registration details given.");
+        }
+
+        boolean usernameAvailable = isUsernameAvailable(newUser.getUsername());
+        boolean emailAvailable = isEmailAvailable(newUser.getEmail());
+
+        if (!usernameAvailable || !emailAvailable) {
+            String msg = "The values provided for the following fields are already taken by other users: ";
+            if (!usernameAvailable) msg += "user_name";
+            if (!emailAvailable) msg += "email";
+            throw new ResourceConflictException(msg);
+        }
+
+        // TODO encrypt provided password before storing in the database
+
+        newUser.setId(UUID.randomUUID().toString());
+        newUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc98", "EMPLOYEE")); // All newly registered users start as EMPLOYEE
+        System.out.println(newUser);
+        userRepo.save(newUser);
+    }
+
+    public String login(LoginRequest request) {
+        String username = request.getUsername();
+        String password = request.getPassword();
+
+        if (!isUsernameValid(username) || !(isPasswordValid(password)))
+            throw new InvalidRequestException("Invalid credentials given.");
+
+        AppUser authUser =  userRepo.findByUsername(request.getUsername());
+        if (authUser == null)
+            throw new AuthenticationException();
+
+        // TODO: Authenticate password
+
+        Principal principal = new Principal(authUser);
+        return tokenService.generateToken(principal);
+    }
+
+    public void approve(String token, ApproveUserRequest request, HttpServletResponse response) {
+        Principal principal = tokenService.extractRequesterDetails(token);
+        if (!principal.getRole().equals("ADMIN")) {
+            response.setStatus(403);
+            return;
+        }
+
+        userRepo.approveUser(request.getId());
+    }
 //
 //    public AppUser delete(DeleteRequest deleteRequest){
 //        String id = deleteRequest.getId();
@@ -135,50 +146,52 @@ public class UserService {
 //        return appUser;
 //    }
 //
-//    private boolean isUserValid(AppUser appUser) {
-//
-//        // First name and last name are not just empty strings or filled with whitespace
-//        if (appUser.getFirstName().trim().equals("") || appUser.getLastName().trim().equals("")) {
-//            return false;
-//        }
-//
-//        // Usernames must be a minimum of 8 and a max of 25 characters in length, and only contain alphanumeric characters.
-//        if (!isUsernameValid(appUser.getUsername())) {
-//            return false;
-//        }
-//
-//        // Passwords require a minimum eight characters, at least one uppercase letter, one lowercase
-//        // letter, one number and one special character
-//        if (!isPasswordValid(appUser.getPassword())) {
-//            return false;
-//        }
-//
-//        // Basic email validation
-//        return isEmailValid(appUser.getEmail());
-//
-//    }
-//
-//    public boolean isEmailValid(String email) {
-//        if (email == null) return false;
-//        return email.matches("^[^@\\s]+@[^@\\s.]+\\.[^@.\\s]+$");
-//    }
-//
-//    public boolean isUsernameValid(String username) {
-//        if (username == null) return false;
-//        return username.matches("^[a-zA-Z0-9]{8,25}");
-//    }
-//
-//    public boolean isPasswordValid(String password) {
-//        return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
-//    }
-//
-//    public boolean isUsernameAvailable(String username) {
-//        return userDAO.findUserByUsername(username) == null;
-//    }
-//
-//    public boolean isEmailAvailable(String email) {
-//        return userDAO.findUserByEmail(email) == null;
-//    }
+    private boolean isUserValid(AppUser appUser) {
+
+        // First name and last name are not just empty strings or filled with whitespace
+        if (appUser.getFirstName().trim().equals("") || appUser.getLastName().trim().equals("")) {
+            return false;
+        }
+
+        // Usernames must be a minimum of 8 and a max of 25 characters in length, and only contain alphanumeric characters.
+        if (!isUsernameValid(appUser.getUsername())) {
+            return false;
+        }
+
+        // Password is between 8 and 25 characters
+        if (!isPasswordValid(appUser.getPassword())) {
+            return false;
+        }
+
+        // Basic email validation
+        return isEmailValid(appUser.getEmail());
+
+    }
+
+    public boolean isEmailValid(String email) {
+        if (email == null) return false;
+
+        System.out.println("isEmailValid: " + email.matches("^[^@\\s]+@[^@\\s.]+\\.[^@.\\s]+$"));
+
+        return email.matches("^[^@\\s]+@[^@\\s.]+\\.[^@.\\s]+$");
+    }
+
+    public boolean isUsernameValid(String username) {
+        if (username == null) return false;
+        return username.matches("^[a-zA-Z0-9]{8,25}");
+    }
+
+    public boolean isPasswordValid(String password) {
+        return password.matches("^[^\\s]{8,25}");
+    }
+
+    public boolean isUsernameAvailable(String username) {
+        return userRepo.findByUsername(username) == null;
+    }
+
+    public boolean isEmailAvailable(String email) {
+        return userRepo.findByEmail(email) == null;
+    }
 
 }
 

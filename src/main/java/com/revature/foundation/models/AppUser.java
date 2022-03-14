@@ -38,12 +38,14 @@ public class AppUser {
         super();
     }
 
-    public AppUser(String username, String email, String password, String firstName, String lastName) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
+    public AppUser(String firstName, String lastName, String email, String username, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        //users are automatically instantiated as false(rather than NULL)
+        this.isActive = false;
     }
 
     public String getId() {
