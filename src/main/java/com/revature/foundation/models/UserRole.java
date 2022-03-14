@@ -1,5 +1,7 @@
 package com.revature.foundation.models;
 
+import com.revature.foundation.util.exceptions.InvalidRequestException;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -22,8 +24,21 @@ public class UserRole {
         super();
     }
 
-    public UserRole(String id, String roleName) {
-        this.id = id;
+    public UserRole(String roleName) {
+        switch (roleName) {
+            case "EMPLOYEE":
+                this.id = "7c3521f5-ff75-4e8a-9913-01d15ee4dc98";
+                break;
+            case "FINANCE MANAGER":
+                this.id = "7c3521f5-ff75-4e8a-9913-01d15ee4dc97";
+                break;
+            case "ADMIN":
+                this.id = "7c3521f5-ff75-4e8a-9913-01d15ee4dc96";
+                break;
+            default:
+                throw new InvalidRequestException("Role \"" + roleName + "\" is not valid.");
+        }
+
         this.roleName = roleName;
     }
 

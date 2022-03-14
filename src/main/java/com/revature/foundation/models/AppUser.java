@@ -44,8 +44,6 @@ public class AppUser {
         this.email = email;
         this.username = username;
         this.password = password;
-        //users are automatically instantiated as false(rather than NULL)
-        this.isActive = false;
     }
 
     public String getId() {

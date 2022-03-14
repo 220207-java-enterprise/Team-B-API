@@ -63,8 +63,6 @@ public class UserService {
 
         AppUser newUser = newUserRequest.extractUser();
 
-        System.out.println(newUser.getEmail());
-
         if (!isUserValid(newUser)) {
             throw new InvalidRequestException("Bad registration details given.");
         }
@@ -83,9 +81,16 @@ public class UserService {
                 BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt(10))
         );
 
+        if (newUserRequest.getRole() != null)
+            newUser.setRole(new UserRole(newUserRequest.getRole()));
+        else
+            // if no role provided in request, user is employee
+            newUser.setRole(new UserRole("EMPLOYEE"));
+
         newUser.setId(UUID.randomUUID().toString());
-        newUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc98", "EMPLOYEE")); // All newly registered users start as EMPLOYEE
-        System.out.println(newUser);
+        //users are automatically instantiated as false(rather than NULL)
+        newUser.setActive(false);
+
         userRepo.save(newUser);
     }
 
