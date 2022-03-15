@@ -1,6 +1,7 @@
 package com.revature.foundation.services;
 
 import com.revature.foundation.dtos.requests.ApproveUserRequest;
+import com.revature.foundation.dtos.requests.DeleteRequest;
 import com.revature.foundation.dtos.requests.LoginRequest;
 import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
@@ -114,6 +115,15 @@ public class UserService {
         }
 
         userRepo.approveUser(request.getId());
+    }
+
+    public void delete(String token, DeleteRequest deleteRequest, HttpServletResponse response){
+        Principal principal = tokenService.extractRequesterDetails(token);
+        if (!principal.getRole().equals("ADMIN")) {
+            response.setStatus(403);
+            return;
+        }
+        userRepo.deleteUser(deleteRequest.getId());
     }
 //
 //    public AppUser delete(DeleteRequest deleteRequest){

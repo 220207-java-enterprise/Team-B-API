@@ -28,6 +28,11 @@ public interface UserRepository extends JpaRepository<AppUser, String> {
     @Query("update AppUser a set a.isActive=true where a.id=?1")
     void approveUser(String id);
 
+    @Transactional
+    @Modifying
+    @Query("update AppUser a set a.isActive=false where a.id=?1")
+    void deleteUser(String id);
+
 //    //Using native SQL query
 //    @Query(
 //        value = "SELECT * from ERS_Users where User_name = ?1",

@@ -1,6 +1,7 @@
 package com.revature.foundation.controllers;
 
 import com.revature.foundation.dtos.requests.ApproveUserRequest;
+import com.revature.foundation.dtos.requests.DeleteRequest;
 import com.revature.foundation.dtos.requests.LoginRequest;
 import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
@@ -73,6 +74,17 @@ public class UserController {
 
         response.setStatus(201);
         userService.approve(token, approveRequest, response);
+    }
+
+    @DeleteMapping()
+    public void delteUser(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request, HttpServletResponse response){
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return;
+        }
+        response.setStatus(204);
+        userService.delete(token, deleteRequest, response);
     }
 
     @ExceptionHandler
