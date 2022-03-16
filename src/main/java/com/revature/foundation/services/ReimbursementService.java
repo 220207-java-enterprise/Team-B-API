@@ -174,11 +174,17 @@ public class ReimbursementService {
             else {
                 reimbursement.setDescription(reimbursement.getDescription());
             }
+            if (updateReimbursementRequest.getType() != null){
+                reimbursement.setType(new ReimbursementType(updateReimbursementRequest.getType()));
+            }
+            else{
+                reimbursement.setType(reimbursement.getReimbursementType());
+            }
         }
         else{
             throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementStatus().getStatusName().toLowerCase());
         }
-        reimbRepository.update(reimbursement.getDescription(), reimbursement.getAmount(), reimbursement.getId());
+        reimbRepository.update(reimbursement.getDescription(), reimbursement.getAmount(), reimbursement.getReimbursementType().getId(), reimbursement.getId());
         return new UpdateReimbursementResponse(reimbursement);
     }
 
