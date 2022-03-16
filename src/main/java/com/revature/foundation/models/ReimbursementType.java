@@ -1,5 +1,7 @@
 package com.revature.foundation.models;
 
+import com.revature.foundation.util.exceptions.InvalidRequestException;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -26,8 +28,24 @@ public class ReimbursementType {
         super();
     }
 
-    public ReimbursementType(String id, String typeName) {
-        this.id = id;
+    public ReimbursementType( String typeName) {
+        switch (typeName) {
+            case "LODGING":
+                this.id = "7c3521f5-ff75-4e8a-9913-01d15ee4dc9a";
+                break;
+            case "TRAVEL":
+                this.id = "7c3521f5-ff75-4e8a-9913-01d15ee4dc9b";
+                break;
+            case "FOOD":
+                this.id = "7c3521f5-ff75-4e8a-9913-01d15ee4dc9c";
+                break;
+            case "OTHER":
+                this.id = "7c3521f5-ff75-4e8a-9913-01d15ee4dc9d";
+                break;
+            default:
+                throw new InvalidRequestException("Type \"" + typeName + "\" is not valid.");
+        }
+
         this.typeName = typeName;
     }
 

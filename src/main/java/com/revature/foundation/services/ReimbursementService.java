@@ -109,7 +109,13 @@ public class ReimbursementService {
         reimbursement.setAuthor(new AppUser(principal.getId()));
         reimbursement.setResolver(new AppUser("8d5f0507-9804-450a-bfda-46209f16ba7c"));
         reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
-        reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
+        if (reimbursementRequest.getType() != null){
+            reimbursement.setType(new ReimbursementType(reimbursementRequest.getType()));
+        }
+        else{
+            reimbursement.setType(new ReimbursementType("OTHER"));
+        }
+
         reimbursement.setSubmitted(new Timestamp(System.currentTimeMillis()));
 
         reimbRepository.save(reimbursement);
@@ -143,36 +149,6 @@ public class ReimbursementService {
         return new StatusUpdateResponse(reimbursement);
     }
 
-    public TypeUpdateResponse updateType(TypeUpdateRequest typeUpdateRequest, String token, HttpServletResponse response){
-        Principal principal = tokenService.extractRequesterDetails(token);
-
-        if (!(principal.getRole().equals("FINANCE MANAGER"))){
-            response.setStatus(403);
-            return null;
-        }
-        Reimbursement reimbursement = reimbRepository.findByReimbId(typeUpdateRequest.getReimb_id());
-        if (typeUpdateRequest.getTypeName().equals(reimbursement.getReimbursementType().getTypeName())){
-            throw new InvalidRequestException("The reimbursement is already "+reimbursement.getReimbursementType().getTypeName().toLowerCase());
-        }
-        if (typeUpdateRequest.getTypeName().equals("OTHER")){
-           reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
-        }
-        else if(typeUpdateRequest.getTypeName().equals("FOOD")){
-            reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9c","FOOD"));
-        }
-        else if(typeUpdateRequest.getTypeName().equals("TRAVEL")){
-            reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9b","TRAVEL"));
-        }
-        else if(typeUpdateRequest.getTypeName().equals("LODGING")){
-            reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9a","LODGING"));
-        }
-
-        reimbursement.setResolver(new AppUser(principal.getId()));
-        reimbursement.setResolved(new Timestamp(System.currentTimeMillis()));
-        reimbRepository.update_type(reimbursement.getReimbursementType().getId(),reimbursement.getResolved(),reimbursement.getId());
-        return new TypeUpdateResponse(reimbursement);
-
-    }
 
     public UpdateReimbursementResponse updateReimb(UpdateReimbursementRequest updateReimbursementRequest, String token, HttpServletResponse response){
 

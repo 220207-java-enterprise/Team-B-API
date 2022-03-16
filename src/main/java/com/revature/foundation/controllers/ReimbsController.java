@@ -98,15 +98,6 @@ public class ReimbsController {
         return reimbursementService.updateStatus(statusUpdateRequest, token, response);
     }
 
-    @PutMapping(produces = "application/json", consumes = "application/json", value = "/type")
-    public TypeUpdateResponse updateType(@RequestBody TypeUpdateRequest typeUpdateRequest, HttpServletRequest request, HttpServletResponse response){
-        String token = request.getHeader("Authorization");
-        if (token == null) {
-            response.setStatus(401);
-            return null;
-        }
-        return reimbursementService.updateType(typeUpdateRequest, token, response);
-    }
 
     @PutMapping(produces = "application/json", consumes = "application/json", value = "/employee")
     public UpdateReimbursementResponse updateReimb(@RequestBody UpdateReimbursementRequest updateReimbursementRequest, HttpServletRequest request, HttpServletResponse response){
