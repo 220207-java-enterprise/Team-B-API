@@ -20,9 +20,11 @@ public class ReimbursementResponse {
         this.amount = newReimbursement.getAmount();
         this.description = newReimbursement.getDescription();
         this.author_id = newReimbursement.getAuthor().getId();
-        this.resolver_id = newReimbursement.getResolver().getId();
         this.status = newReimbursement.getReimbursementStatus().getStatusName();
         this.type = newReimbursement.getReimbursementType().getTypeName();
+
+        if (newReimbursement.getResolver() != null)
+            this.resolver_id = newReimbursement.getResolver().getId();
     }
 
     public String getId(){return id;}
