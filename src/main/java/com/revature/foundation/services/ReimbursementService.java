@@ -2,11 +2,11 @@ package com.revature.foundation.services;
 
 import com.revature.foundation.dtos.requests.*;
 import com.revature.foundation.dtos.responses.*;
+import com.revature.foundation.models.AppUser;
 import com.revature.foundation.models.Reimbursement;
 import com.revature.foundation.models.ReimbursementStatus;
 import com.revature.foundation.models.ReimbursementType;
 import com.revature.foundation.repos.ReimbRepository;
-import com.revature.foundation.repos.ReimbursementDAO;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +40,7 @@ public class ReimbursementService {
             return null;
         }
 
-        return reimbRepository.findAll()
+        return ((List<Reimbursement>) reimbRepository.findAll())
                               .stream()
                               .map(ReimbursementResponse::new)
                               .collect(Collectors.toList());
@@ -106,7 +106,7 @@ public class ReimbursementService {
         }
         Reimbursement reimbursement = reimbursementRequest.extractReimbursement();
         reimbursement.setId(UUID.randomUUID().toString());
-        reimbursement.setAuthor_id(principal.getId());
+        reimbursement.setAuthor(new AppUser(principal.getId()));
         reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
         reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
         reimbursement.setSubmitted(new Timestamp(System.currentTimeMillis()));
@@ -136,7 +136,7 @@ public class ReimbursementService {
         else if(statusUpdateRequest.getStatusName().equals("DENIED")){
             reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9g","DENIED"));
         }
-        reimbursement.setResolver_id(principal.getId());
+        reimbursement.setResolver(new AppUser(principal.getId()));
         reimbursement.setResolved(new Timestamp(System.currentTimeMillis()));
         reimbRepository.update_status(reimbursement.getReimbursementStatus().getId(),reimbursement.getResolved(),reimbursement.getId());
         return new StatusUpdateResponse(reimbursement);
@@ -166,7 +166,7 @@ public class ReimbursementService {
             reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9a","LODGING"));
         }
 
-        reimbursement.setResolver_id(principal.getId());
+        reimbursement.setResolver(new AppUser(principal.getId()));
         reimbursement.setResolved(new Timestamp(System.currentTimeMillis()));
         reimbRepository.update_type(reimbursement.getReimbursementType().getId(),reimbursement.getResolved(),reimbursement.getId());
         return new TypeUpdateResponse(reimbursement);

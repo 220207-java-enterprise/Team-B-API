@@ -3,6 +3,7 @@ package com.revature.foundation.models;
 import javax.persistence.*;
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.util.List;
 
 @Entity
 @Table(name = "ERS_Users")
@@ -12,13 +13,13 @@ public class AppUser {
     @Column(name = "user_id")
     private String id;
 
-    @Column//TODO implement validation
+    @Column
     private String username;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column//TODO implement validation
+    @Column
     private String password;
 
     @Column(name = "given_name", nullable = false)
@@ -34,8 +35,26 @@ public class AppUser {
     @JoinColumn(name = "role_id")
     private UserRole role;
 
+    @OneToMany(
+        mappedBy = "author",
+        fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL
+    )
+    private List<Reimbursement> authorReimbursements;
+
+    @OneToMany(
+            mappedBy = "resolver",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL
+    )
+    private List<Reimbursement> resolverReimbursements;
+
     public AppUser() {
         super();
+    }
+
+    public AppUser(String id) {
+        this.id = id;
     }
 
     public AppUser(String firstName, String lastName, String email, String username, String password) {
@@ -110,6 +129,22 @@ public class AppUser {
         this.role = role;
     }
 
+    public List<Reimbursement> getAuthorReimbursements() {
+        return authorReimbursements;
+    }
+
+    public void setAuthorReimbursements(List<Reimbursement> authorReimbursements) {
+        this.authorReimbursements = authorReimbursements;
+    }
+
+    public List<Reimbursement> getResolverReimbursements() {
+        return resolverReimbursements;
+    }
+
+    public void setResolverReimbursements(List<Reimbursement> resolverReimbursements) {
+        this.resolverReimbursements = resolverReimbursements;
+    }
+
     @Override
     public String toString() {
         return "AppUser{" +
@@ -121,6 +156,8 @@ public class AppUser {
                 ", lastName='" + lastName + '\'' +
                 ", isActive=" + isActive +
                 ", role=" + role +
+                ", authorReimbursements=" + authorReimbursements +
+                ", resolverReimbursements=" + resolverReimbursements +
                 '}';
     }
 }

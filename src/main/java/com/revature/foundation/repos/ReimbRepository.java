@@ -13,15 +13,13 @@ import java.util.List;
 @Repository
 public interface ReimbRepository extends CrudRepository<Reimbursement, String> {
 
-    List<Reimbursement> findAll();
-
     @Query("from Reimbursement r where r.type.typeName = ?1")
     List<Reimbursement> findByType(String typeName);
 
     @Query("from Reimbursement r where r.status.statusName = ?1")
     List<Reimbursement> findByStatus(String statusName);
 
-    @Query("from Reimbursement r where r.author_id = ?1")
+    @Query("from Reimbursement r where r.author.id = ?1")
     List<Reimbursement> findByAuthor(String author_id);
 
     @Transactional
