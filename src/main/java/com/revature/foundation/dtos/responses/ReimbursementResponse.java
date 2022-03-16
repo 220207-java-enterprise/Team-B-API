@@ -20,7 +20,13 @@ public class ReimbursementResponse {
         this.amount = newReimbursement.getAmount();
         this.description = newReimbursement.getDescription();
         this.author_id = newReimbursement.getAuthor().getId();
-        this.resolver_id = newReimbursement.getResolver().getId();
+        if (newReimbursement.getResolver().getId().equals("8d5f0507-9804-450a-bfda-46209f16ba7c")) {
+            this.resolver_id = "Not yet Resolved";
+        }
+        else{
+            this.resolver_id = newReimbursement.getResolver().getId();
+        }
+
         this.status = newReimbursement.getReimbursementStatus().getStatusName();
         this.type = newReimbursement.getReimbursementType().getTypeName();
     }

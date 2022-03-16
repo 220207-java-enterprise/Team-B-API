@@ -34,7 +34,7 @@ public class Reimbursement {
     private AppUser author;
 
     @ManyToOne
-    @JoinColumn(name = "resolver_id", nullable = false)
+    @JoinColumn(name = "resolver_id")
     private AppUser resolver;
 
     @ManyToOne
