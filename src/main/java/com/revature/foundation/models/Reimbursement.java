@@ -30,11 +30,12 @@ public class Reimbursement {
     private String paymentId;
 
     @ManyToOne
-    @JoinColumn(name= "author_id", nullable = false)
+    @JoinColumn(name = "author_id", nullable = false)
     private AppUser author;
 
-    @Column
-    private String resolver_id;
+    @ManyToOne
+    @JoinColumn(name = "resolver_id", nullable = false)
+    private AppUser resolver;
 
     @ManyToOne
     @JoinColumn(name = "status_id")
@@ -102,11 +103,11 @@ public class Reimbursement {
         this.author = author;
     }
 
-    public String getResolver_id() {
-        return resolver_id;
+    public AppUser getResolver() {
+        return resolver;
     }
-    public void setResolver_id(String resolver_id) {
-        this.resolver_id = resolver_id;
+    public void setResolver(AppUser resolver) {
+        this.resolver = resolver;
     }
 
     public ReimbursementStatus getReimbursementStatus() {
@@ -133,7 +134,7 @@ public class Reimbursement {
                 ", description='" + description + '\'' +
                 ", paymentId='" + paymentId + '\'' +
                 ", author='" + author + '\'' +
-                ", resolver_id='" + resolver_id + '\'' +
+                ", resolver='" + resolver + '\'' +
                 ", status=" + status +
                 ", type=" + type +
                 '}';
