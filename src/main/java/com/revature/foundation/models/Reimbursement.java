@@ -29,8 +29,9 @@ public class Reimbursement {
     @Column
     private String paymentId;
 
-    @Column(nullable = false)
-    private String author_id;
+    @ManyToOne
+    @JoinColumn(name= "author_id", nullable = false)
+    private AppUser author;
 
     @Column
     private String resolver_id;
@@ -47,10 +48,9 @@ public class Reimbursement {
         super();
     }
 
-    public Reimbursement(float amount,String description, String author_id) {
+    public Reimbursement(float amount,String description) {
         this.amount = amount;
         this.description = description;
-        this.author_id = author_id;
     }
 
     public String getId() {
@@ -95,11 +95,11 @@ public class Reimbursement {
         this.paymentId = paymentId;
     }
 
-    public String getAuthor_id() {
-        return author_id;
+    public AppUser getAuthor() {
+        return author;
     }
-    public void setAuthor_id(String author_id) {
-        this.author_id = author_id;
+    public void setAuthor(AppUser author) {
+        this.author = author;
     }
 
     public String getResolver_id() {
@@ -132,7 +132,7 @@ public class Reimbursement {
                 ", resolved=" + resolved +
                 ", description='" + description + '\'' +
                 ", paymentId='" + paymentId + '\'' +
-                ", author_id='" + author_id + '\'' +
+                ", author='" + author + '\'' +
                 ", resolver_id='" + resolver_id + '\'' +
                 ", status=" + status +
                 ", type=" + type +

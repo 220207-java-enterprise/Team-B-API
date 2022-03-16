@@ -120,7 +120,7 @@ public class ReimbsController {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public HashMap<String, Object> handleInvalidRequests(InvalidRequestException e) {
+    public HashMap<String, Object> handleInvalidRequests(RuntimeException e) {
         HashMap<String, Object> responseBody = new HashMap<>();
         //responseBody.put("status", 400);
         responseBody.put("message", e.getClass().getSimpleName() + ": " + e.getMessage());

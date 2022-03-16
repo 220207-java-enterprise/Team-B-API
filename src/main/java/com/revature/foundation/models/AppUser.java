@@ -3,6 +3,7 @@ package com.revature.foundation.models;
 import javax.persistence.*;
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.util.List;
 
 @Entity
 @Table(name = "ERS_Users")
@@ -34,8 +35,19 @@ public class AppUser {
     @JoinColumn(name = "role_id")
     private UserRole role;
 
+    @OneToMany(
+        mappedBy = "author",
+        fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL
+    )
+    private List<Reimbursement> reimbursements;
+
     public AppUser() {
         super();
+    }
+
+    public AppUser(String id) {
+        this.id = id;
     }
 
     public AppUser(String firstName, String lastName, String email, String username, String password) {
@@ -110,6 +122,14 @@ public class AppUser {
         this.role = role;
     }
 
+    public List<Reimbursement> getReimbursements() {
+        return reimbursements;
+    }
+
+    public void setReimbursements(List<Reimbursement> reimbursements) {
+        this.reimbursements = reimbursements;
+    }
+
     @Override
     public String toString() {
         return "AppUser{" +
@@ -121,6 +141,7 @@ public class AppUser {
                 ", lastName='" + lastName + '\'' +
                 ", isActive=" + isActive +
                 ", role=" + role +
+                ", reimbursements=" + reimbursements +
                 '}';
     }
 }

@@ -19,7 +19,7 @@ public class ReimbursementResponse {
         this.id = newReimbursement.getId();
         this.amount = newReimbursement.getAmount();
         this.description = newReimbursement.getDescription();
-        this.author_id = newReimbursement.getAuthor_id();
+        this.author_id = newReimbursement.getAuthor().getId();
         this.resolver_id = newReimbursement.getResolver_id();
         this.status = newReimbursement.getReimbursementStatus().getStatusName();
         this.type = newReimbursement.getReimbursementType().getTypeName();

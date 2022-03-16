@@ -2,6 +2,7 @@ package com.revature.foundation.services;
 
 import com.revature.foundation.dtos.requests.*;
 import com.revature.foundation.dtos.responses.*;
+import com.revature.foundation.models.AppUser;
 import com.revature.foundation.models.Reimbursement;
 import com.revature.foundation.models.ReimbursementStatus;
 import com.revature.foundation.models.ReimbursementType;
@@ -40,7 +41,7 @@ public class ReimbursementService {
             return null;
         }
 
-        return reimbRepository.findAll()
+        return ((List<Reimbursement>) reimbRepository.findAll())
                               .stream()
                               .map(ReimbursementResponse::new)
                               .collect(Collectors.toList());
@@ -106,7 +107,7 @@ public class ReimbursementService {
         }
         Reimbursement reimbursement = reimbursementRequest.extractReimbursement();
         reimbursement.setId(UUID.randomUUID().toString());
-        reimbursement.setAuthor_id(principal.getId());
+        reimbursement.setAuthor(new AppUser(principal.getId()));
         reimbursement.setStatus(new ReimbursementStatus("7c3521f5-ff75-4e8a-9913-01d15ee4dc9e","PENDING"));
         reimbursement.setType(new ReimbursementType("7c3521f5-ff75-4e8a-9913-01d15ee4dc9d","OTHER"));
         reimbursement.setSubmitted(new Timestamp(System.currentTimeMillis()));
