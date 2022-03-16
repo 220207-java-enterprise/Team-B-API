@@ -6,13 +6,15 @@ public class UpdateReimbursementRequest {
     private float amount;
     private String description;
     private String id;
+    private String type;
 
     public UpdateReimbursementRequest(){ super();}
 
-    public UpdateReimbursementRequest(float amount, String description,  String id){
+    public UpdateReimbursementRequest(float amount, String description,  String id, String type){
         this.amount = amount;
         this.description = description;
         this.id = id;
+        this.type = type.toUpperCase();
     }
 
     public float getAmount(){return amount;}
@@ -27,12 +29,19 @@ public class UpdateReimbursementRequest {
 
     public void setId(String id){this.id = id;}
 
+    public String getType() {
+        return type;
+    }
 
+    public void setType(String type) {
+        this.type = type.toUpperCase();
+    }
 
     public String toString() {
         return "UpdateReimbursementRequest{" +
                 "amount='" + amount + '\'' +
                 ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 }
