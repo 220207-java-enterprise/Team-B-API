@@ -97,6 +97,22 @@ public class ReimbursementService {
                 .collect(Collectors.toList());
     }
 
+    public List<ReimbursementResponse> getByResolver(String token, HttpServletResponse response){
+
+        Principal principal = tokenService.extractRequesterDetails(token);
+
+        if (!(principal.getRole().equals("FINANCE MANAGER"))){
+            response.setStatus(403);
+            return null;
+        }
+        String resolverId = principal.getId();
+
+        return reimbRepository.findByResolver(resolverId)
+                .stream()
+                .map(ReimbursementResponse::new)
+                .collect(Collectors.toList());
+    }
+
     public ResourceCreationResponse addReimbursement(ReimbursementRequest reimbursementRequest, String token, HttpServletResponse response){
         Principal principal = tokenService.extractRequesterDetails(token);
 

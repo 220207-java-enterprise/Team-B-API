@@ -78,6 +78,17 @@ public class ReimbsController {
         return reimbursementService.getByAuthor(token, response);
     }
 
+    @GetMapping(value = "/resolver", produces = "application/json")
+    public List<ReimbursementResponse> getByResolver(HttpServletRequest request, HttpServletResponse response) {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+
+        return reimbursementService.getByResolver(token, response);
+    }
+
     @PostMapping(produces = "application/json", consumes = "application/json")
     public ResourceCreationResponse addReimb(@RequestBody ReimbursementRequest reimbursementRequest, HttpServletRequest request, HttpServletResponse response){
         String token = request.getHeader("Authorization");

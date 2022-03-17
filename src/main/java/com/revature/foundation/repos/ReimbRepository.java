@@ -22,6 +22,9 @@ public interface ReimbRepository extends CrudRepository<Reimbursement, String> {
     @Query("from Reimbursement r where r.author.id = ?1")
     List<Reimbursement> findByAuthor(String author_id);
 
+    @Query("from Reimbursement r where r.resolver.id = ?1")
+    List<Reimbursement> findByResolver(String resolver_id);
+
     @Transactional
     @Modifying
     @Query(value = "UPDATE ers_reimbursements " + "SET status_id = ?1, "+ "resolved = ?2 "+ "WHERE reimb_id = ?3", nativeQuery = true)
