@@ -19,7 +19,8 @@
     </Appenders>
     
     <Loggers>
-        <Logger name="FileLogger" level="DEBUG">
+        <Logger name="DebugLogger" level="DEBUG">
+            <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="DebugFileAppender"/>
         </Logger>
         <Root level="INFO">
