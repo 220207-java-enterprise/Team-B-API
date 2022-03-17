@@ -2,7 +2,7 @@
 <Configuration>
 
     <Properties>
-        <Property name="logdir">${env:CATALINA_HOME}/dev-logs/ers</Property>
+        <Property name="logdir">logs</Property>
         <Property name="layout">%d [%t] %-5level %logger{36} - %msg%n%throwable</Property>
     </Properties>
 
@@ -10,18 +10,22 @@
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
             <PatternLayout pattern="${layout}"/>
         </Console>
-        <File name="FileAppender" fileName="${logdir}/app.log" immediateFlush="true">
+        <File name="RootFileAppender" fileName="${logdir}/app.info.log">
+            <PatternLayout pattern="${layout}"/>
+        </File>
+        <File name="DebugFileAppender" fileName="${logdir}/app.debug.log">
             <PatternLayout pattern="${layout}"/>
         </File>
     </Appenders>
-
+    
     <Loggers>
-        <Logger name="FileLogger" level="DEBUG">
-            <AppenderRef ref="FileAppender"/>
-        </Logger>
-        <Root level="DEBUG">
+        <Logger name="DebugLogger" level="DEBUG">
             <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="DebugFileAppender"/>
+        </Logger>
+        <Root level="INFO">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RootFileAppender"/>
         </Root>
     </Loggers>
-
 </Configuration>

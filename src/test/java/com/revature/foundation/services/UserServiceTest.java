@@ -1,6 +1,5 @@
 package com.revature.foundation.services;
 
-import com.revature.foundation.repos.UserDAO;
 import com.revature.foundation.dtos.requests.LoginRequest;
 import com.revature.foundation.models.AppUser;
 import com.revature.foundation.util.exceptions.AuthenticationException;

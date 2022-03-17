@@ -1,6 +1,7 @@
 package com.revature.foundation.services;
 
 import com.revature.foundation.dtos.requests.ApproveUserRequest;
+import com.revature.foundation.dtos.requests.DeleteRequest;
 import com.revature.foundation.dtos.requests.LoginRequest;
 import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
@@ -11,6 +12,7 @@ import com.revature.foundation.repos.UserRepository;
 import com.revature.foundation.util.exceptions.AuthenticationException;
 import com.revature.foundation.util.exceptions.InvalidRequestException;
 import com.revature.foundation.util.exceptions.ResourceConflictException;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +34,27 @@ public class UserService {
         this.tokenService = tokenService;
     }
 
-    public List<AppUserResponse> getAllUsers() {
+    public List<AppUserResponse> getAllUsers(String token, HttpServletResponse response) {
+        Principal principal = tokenService.extractRequesterDetails(token);
+        if (!principal.getRole().equals("ADMIN")) {
+            response.setStatus(403);
+            return null;
+        }
+
         return userRepo.findAllActive()
+                .stream()
+                .map(AppUserResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<AppUserResponse> getAllInactiveUsers(String token, HttpServletResponse response) {
+        Principal principal = tokenService.extractRequesterDetails(token);
+        if (!principal.getRole().equals("ADMIN")) {
+            response.setStatus(403);
+            return null;
+        }
+
+        return userRepo.findAllInactive()
                 .stream()
                 .map(AppUserResponse::new)
                 .collect(Collectors.toList());
@@ -42,8 +63,6 @@ public class UserService {
     public void register(NewUserRequest newUserRequest) {
 
         AppUser newUser = newUserRequest.extractUser();
-
-        System.out.println(newUser.getEmail());
 
         if (!isUserValid(newUser)) {
             throw new InvalidRequestException("Bad registration details given.");
@@ -59,11 +78,20 @@ public class UserService {
             throw new ResourceConflictException(msg);
         }
 
-        // TODO encrypt provided password before storing in the database
+        newUser.setPassword(
+                BCrypt.hashpw(newUser.getPassword(), BCrypt.gensalt(10))
+        );
+
+        if (newUserRequest.getRole() != null)
+            newUser.setRole(new UserRole(newUserRequest.getRole()));
+        else
+            // if no role provided in request, user is employee
+            newUser.setRole(new UserRole("EMPLOYEE"));
 
         newUser.setId(UUID.randomUUID().toString());
-        newUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc98", "EMPLOYEE")); // All newly registered users start as EMPLOYEE
-        System.out.println(newUser);
+        //users are automatically instantiated as false(rather than NULL)
+        newUser.setActive(false);
+
         userRepo.save(newUser);
     }
 
@@ -92,6 +120,15 @@ public class UserService {
         }
 
         userRepo.approveUser(request.getId());
+    }
+
+    public void delete(String token, DeleteRequest deleteRequest, HttpServletResponse response){
+        Principal principal = tokenService.extractRequesterDetails(token);
+        if (!principal.getRole().equals("ADMIN")) {
+            response.setStatus(403);
+            return;
+        }
+        userRepo.deleteUser(deleteRequest.getId());
     }
 //
 //    public AppUser delete(DeleteRequest deleteRequest){
