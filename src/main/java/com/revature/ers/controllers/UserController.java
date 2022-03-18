@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -73,7 +74,7 @@ public class UserController {
         userService.approve(token, approveRequest, response);
     }
 
-    @DeleteMapping()
+    @PutMapping()
     public void delteUser(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request, HttpServletResponse response){
         String token = request.getHeader("Authorization");
         if (token == null) {
