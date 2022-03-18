@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/reimbs")
 public class ReimbsController {
