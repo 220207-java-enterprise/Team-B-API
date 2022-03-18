@@ -1,6 +1,7 @@
 package com.revature.foundation.controllers;
 
 import com.revature.foundation.dtos.requests.ApproveUserRequest;
+import com.revature.foundation.dtos.requests.DeleteRequest;
 import com.revature.foundation.dtos.requests.LoginRequest;
 import com.revature.foundation.dtos.requests.NewUserRequest;
 import com.revature.foundation.dtos.responses.AppUserResponse;
@@ -30,8 +31,25 @@ public class UserController {
     }
 
     @GetMapping
-    public List<AppUserResponse> getAllUsers()  {
-        return userService.getAllUsers();
+    public List<AppUserResponse> getAllUsers(HttpServletRequest request, HttpServletResponse response)  {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+
+        return userService.getAllUsers(token, response);
+    }
+
+    @GetMapping("inactive")
+    public List<AppUserResponse> getAllInactiveUsers(HttpServletRequest request, HttpServletResponse response)  {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+        }
+
+        return userService.getAllInactiveUsers(token, response);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)//accepted because admin needs to approve request
@@ -56,6 +74,17 @@ public class UserController {
 
         response.setStatus(201);
         userService.approve(token, approveRequest, response);
+    }
+
+    @DeleteMapping()
+    public void delteUser(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request, HttpServletResponse response){
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return;
+        }
+        response.setStatus(204);
+        userService.delete(token, deleteRequest, response);
     }
 
     @ExceptionHandler

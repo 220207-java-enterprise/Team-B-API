@@ -13,15 +13,13 @@ import java.util.List;
 @Repository
 public interface ReimbRepository extends CrudRepository<Reimbursement, String> {
 
-    List<Reimbursement> findAll();
-
     @Query("from Reimbursement r where r.type.typeName = ?1")
     List<Reimbursement> findByType(String typeName);
 
     @Query("from Reimbursement r where r.status.statusName = ?1")
     List<Reimbursement> findByStatus(String statusName);
 
-    @Query("from Reimbursement r where r.author_id = ?1")
+    @Query("from Reimbursement r where r.author.id = ?1")
     List<Reimbursement> findByAuthor(String author_id);
 
     @Transactional
@@ -31,13 +29,8 @@ public interface ReimbRepository extends CrudRepository<Reimbursement, String> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE ers_reimbursements " + "SET type_id = ?1, "+ "resolved = ?2 "+ "WHERE reimb_id = ?3", nativeQuery = true)
-    void update_type(String type_id, Timestamp resolved, String reimb_id);
-
-    @Transactional
-    @Modifying
-    @Query(value = "UPDATE ers_reimbursements " + "SET description = ?1, "+ "amount = ?2 "+ "WHERE reimb_id = ?3", nativeQuery = true)
-    void update(String description, float amount, String reimb_id);
+    @Query(value = "UPDATE ers_reimbursements " + "SET description = ?1, "+ "amount = ?2, "+ "type_id = ?3 "+ "WHERE reimb_id = ?4", nativeQuery = true)
+    void update(String description, float amount, String type_id, String reimb_id);
 
     @Query("from Reimbursement r where r.id = ?1")
     Reimbursement findByReimbId(String id);

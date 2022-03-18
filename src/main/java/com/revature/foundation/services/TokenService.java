@@ -32,22 +32,16 @@ public class TokenService {
     }
 
     public Principal extractRequesterDetails(String jwt) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(jwtConfig.getSigningKey())
+                .parseClaimsJws(jwt)
+                .getBody();
 
-        try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(jwtConfig.getSigningKey())
-                    .parseClaimsJws(jwt)
-                    .getBody();
+        Principal principal = new Principal();
+        principal.setId(claims.getId());
+        principal.setUsername(claims.getSubject());
+        principal.setRole(claims.get("role", String.class));
 
-            Principal principal = new Principal();
-            principal.setId(claims.getId());
-            principal.setUsername(claims.getSubject());
-            principal.setRole(claims.get("role", String.class));
-
-            return principal;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        return principal;
     }
 }
