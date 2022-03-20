@@ -74,7 +74,7 @@ public class UserController {
         userService.approve(token, approveRequest, response);
     }
 
-    @PutMapping()
+    @DeleteMapping()
     public void delteUser(@RequestBody DeleteRequest deleteRequest, HttpServletRequest request, HttpServletResponse response){
         String token = request.getHeader("Authorization");
         if (token == null) {
