@@ -5,6 +5,7 @@ import com.revature.ers.dtos.requests.DeleteRequest;
 import com.revature.ers.dtos.requests.LoginRequest;
 import com.revature.ers.dtos.requests.NewUserRequest;
 import com.revature.ers.dtos.responses.AppUserResponse;
+import com.revature.ers.dtos.responses.Principal;
 import com.revature.ers.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,9 +58,8 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public void login(@RequestBody LoginRequest request, HttpServletResponse response) {
-        String token = userService.login(request);
-        response.setHeader("Authorization", token);
+    public Principal login(@RequestBody LoginRequest request, HttpServletResponse response) {
+        return userService.login(request, response);
     }
 
     @PutMapping(value = "approve")
