@@ -94,7 +94,7 @@ public class UserService {
         userRepo.save(newUser);
     }
 
-    public String login(LoginRequest request) {
+    public Principal login(LoginRequest request, HttpServletResponse response) {
         String username = request.getUsername();
         String password = request.getPassword();
 
@@ -108,7 +108,8 @@ public class UserService {
         // TODO: Authenticate password
 
         Principal principal = new Principal(authUser);
-        return tokenService.generateToken(principal);
+        response.setHeader("Authorization", tokenService.generateToken(principal));
+        return principal;
     }
 
     public void approve(String token, ApproveUserRequest request, HttpServletResponse response) {
