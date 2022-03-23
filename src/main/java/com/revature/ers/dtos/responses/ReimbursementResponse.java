@@ -6,8 +6,8 @@ public class ReimbursementResponse {
     private String id;
     private double amount;
     private String description;
-    private String author_id;
-    private String resolver_id;
+    private String author;
+    private String resolver;
     private String status;
     private String type;
 
@@ -17,12 +17,12 @@ public class ReimbursementResponse {
         this.id = newReimbursement.getId();
         this.amount = newReimbursement.getAmount();
         this.description = newReimbursement.getDescription();
-        this.author_id = newReimbursement.getAuthor().getFirstName() + " " + newReimbursement.getAuthor().getLastName();
+        this.author = newReimbursement.getAuthor().getFirstName() + " " + newReimbursement.getAuthor().getLastName();
         this.status = newReimbursement.getReimbursementStatus().getStatusName();
         this.type = newReimbursement.getReimbursementType().getTypeName();
 
         if (newReimbursement.getResolver() != null)
-            this.resolver_id = newReimbursement.getResolver().getFirstName() + " " + newReimbursement.getResolver().getLastName();
+            this.resolver = newReimbursement.getResolver().getFirstName() + " " + newReimbursement.getResolver().getLastName();
     }
 
     public String getId(){return id;}
@@ -37,13 +37,13 @@ public class ReimbursementResponse {
 
     public void setDescription(String description){this.description = description;}
 
-    public String getAuthor_id(){return author_id;}
+    public String getAuthor_id(){return author;}
 
-    public void setAuthor_id(String author_id){this.author_id = author_id;}
+    public void setAuthor_id(String author_id){this.author = author_id;}
 
-    public String getResolver_id(){return resolver_id;}
+    public String getResolver_id(){return resolver;}
 
-    public void setResolver_id(String resolver_id){this.resolver_id = resolver_id;}
+    public void setResolver_id(String resolver_id){this.resolver = resolver_id;}
 
     public String getStatus(){return status;}
 
