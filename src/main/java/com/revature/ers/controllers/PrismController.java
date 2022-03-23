@@ -32,6 +32,7 @@ public class PrismController {
         String token = request.getHeader("Authorization");
         if (token == null) {
             response.setStatus(401);
+            return;
         }
 
         prismService.register(token, response);

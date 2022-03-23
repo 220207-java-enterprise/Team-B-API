@@ -56,6 +56,7 @@ public class PrismService {
         }
 
         prismRepo.save(prismInfo);
+        response.setStatus(201);
     }
 
     private List<PrismInfo> getInfo() {
