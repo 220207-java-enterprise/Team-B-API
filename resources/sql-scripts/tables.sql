@@ -1,3 +1,4 @@
+drop table if exists ers_prism_info; 
 drop table if exists ers_reimbursements;
 drop table if exists ers_users;
 drop table if exists ers_reimbursement_statuses;
@@ -66,6 +67,10 @@ create table ERS_Reimbursements(
 	references ers_Reimbursement_Types(Type_Id)
 );
 
+create table ers_prism_info(
+    org_id varchar primary key,
+    auth_code varchar unique not null
+);
 
 insert into ers_user_roles
 values
