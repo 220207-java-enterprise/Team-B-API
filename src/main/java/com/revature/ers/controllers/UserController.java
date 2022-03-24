@@ -57,6 +57,7 @@ public class UserController {
         if (token == null) {
             response.setStatus(401);
             return null;
+
         }
 
         return userService.getEveryone(token, response);
