@@ -18,6 +18,9 @@ public interface UserRepository extends JpaRepository<AppUser, String> {
     @Query("from AppUser a where a.isActive = false")
     List<AppUser> findAllInactive();
 
+    @Query("from AppUser a where a.username = ?1 and a.password = ?2")
+    AppUser findAppUserByUsernameAndPassword(String username, String password);
+
     AppUser findByUsername(String username);
 
     AppUser findByEmail(String email);

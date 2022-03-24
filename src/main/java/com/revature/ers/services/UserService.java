@@ -92,6 +92,7 @@ public class UserService {
         newUser.setActive(false);
 
         userRepo.save(newUser);
+
     }
 
     public Principal login(LoginRequest request, HttpServletResponse response) {
@@ -183,7 +184,7 @@ public class UserService {
 //        return appUser;
 //    }
 //
-    private boolean isUserValid(AppUser appUser) {
+    public boolean isUserValid(AppUser appUser) {
 
         // First name and last name are not just empty strings or filled with whitespace
         if (appUser.getFirstName().trim().equals("") || appUser.getLastName().trim().equals("")) {
