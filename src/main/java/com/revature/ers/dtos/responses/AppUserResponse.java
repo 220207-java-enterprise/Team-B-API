@@ -9,6 +9,7 @@ public class AppUserResponse {
     private String lastName;
     private String username;
     private String role;
+    private String status;
 
     public AppUserResponse() {
         super();
@@ -20,6 +21,11 @@ public class AppUserResponse {
         this.lastName = user.getLastName();
         this.username = user.getUsername();
         this.role = user.getRole().getRoleName();
+
+        if (user.getActive())
+            this.status = "Active";
+        else
+            this.status = "Inactive";
     }
 
     public String getId() {
@@ -60,5 +66,13 @@ public class AppUserResponse {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
