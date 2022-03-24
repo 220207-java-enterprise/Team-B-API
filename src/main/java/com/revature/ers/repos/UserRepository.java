@@ -12,6 +12,9 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<AppUser, String> {
 
+    @Query("from AppUser a")
+    List<AppUser> findEveryone();
+
     @Query("from AppUser a where a.isActive = true")
     List<AppUser> findAllActive();
 

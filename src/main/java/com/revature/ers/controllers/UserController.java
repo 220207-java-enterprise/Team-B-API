@@ -51,6 +51,18 @@ public class UserController {
         return userService.getAllInactiveUsers(token, response);
     }
 
+    @GetMapping("all")
+    public List<AppUserResponse> getEveryone(HttpServletRequest request, HttpServletResponse response)  {
+        String token = request.getHeader("Authorization");
+        if (token == null) {
+            response.setStatus(401);
+            return null;
+
+        }
+
+        return userService.getEveryone(token, response);
+    }
+
     @ResponseStatus(HttpStatus.ACCEPTED)//accepted because admin needs to approve request
     @PostMapping
     public void registerNewUser(@RequestBody NewUserRequest request) {
@@ -84,6 +96,7 @@ public class UserController {
         response.setStatus(204);
         userService.delete(token, deleteRequest, response);
     }
+
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
