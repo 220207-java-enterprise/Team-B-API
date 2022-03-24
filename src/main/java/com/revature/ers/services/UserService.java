@@ -33,6 +33,19 @@ public class UserService {
         this.tokenService = tokenService;
     }
 
+    public List<AppUserResponse> getEveryone(String token, HttpServletResponse response) {
+        Principal principal = tokenService.extractRequesterDetails(token);
+        if (!principal.getRole().equals("ADMIN")) {
+            response.setStatus(403);
+            return null;
+        }
+
+        return userRepo.findEveryone()
+                .stream()
+                .map(AppUserResponse::new)
+                .collect(Collectors.toList());
+    }
+
     public List<AppUserResponse> getAllUsers(String token, HttpServletResponse response) {
         Principal principal = tokenService.extractRequesterDetails(token);
         if (!principal.getRole().equals("ADMIN")) {
