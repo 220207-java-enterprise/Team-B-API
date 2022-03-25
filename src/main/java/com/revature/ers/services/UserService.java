@@ -119,7 +119,11 @@ public class UserService {
         if (authUser == null)
             throw new AuthenticationException();
 
-        // TODO: Authenticate password
+        if (!authUser.getActive())
+            throw new AuthenticationException();
+
+        if (!BCrypt.checkpw(password, authUser.getPassword()))
+            throw new AuthenticationException();
 
         Principal principal = new Principal(authUser);
         response.setHeader("Authorization", tokenService.generateToken(principal));
