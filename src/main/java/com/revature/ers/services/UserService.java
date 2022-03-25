@@ -148,59 +148,7 @@ public class UserService {
         }
         userRepo.deleteUser(deleteRequest.getId());
     }
-//
-//    public AppUser delete(DeleteRequest deleteRequest){
-//        String id = deleteRequest.getId();
-//
-//        AppUser appUser = userDAO.getById(id);
-//
-//        userDAO.deleteById(id);
-//
-//        return appUser;
-//    }
-//
-//    public AppUser update(UpdateUserRequest updateUserRequest){
-//        String id = updateUserRequest.getId();
-//
-//        AppUser appUser = userDAO.getById(id);
-//
-//        if (updateUserRequest.getEmail() != null){
-//            appUser.setEmail(updateUserRequest.getEmail());
-//        }
-//
-//        if (updateUserRequest.getFirstName() != null){
-//            appUser.setFirstName(updateUserRequest.getFirstName());
-//        }
-//
-//        if (updateUserRequest.getLastName() != null){
-//            appUser.setLastName(updateUserRequest.getLastName());
-//        }
-//
-//        if (updateUserRequest.getPassword() != null){
-//            appUser.setPassword(updateUserRequest.getPassword());
-//        }
-//
-//        if (updateUserRequest.getUsername() != null){
-//            appUser.setUsername(updateUserRequest.getUsername());
-//        }
-//
-//        if (updateUserRequest.getRole_id() != null){
-//            if (updateUserRequest.getRole_id().equals("7c3521f5-ff75-4e8a-9913-01d15ee4dc96")){
-//                appUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc96","ADMIN"));
-//            }
-//            else if (updateUserRequest.getRole_id().equals("7c3521f5-ff75-4e8a-9913-01d15ee4dc97")){
-//                appUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc97","FINANCE MANAGER"));
-//            }
-//            else if (updateUserRequest.getRole_id().equals("7c3521f5-ff75-4e8a-9913-01d15ee4dc98")){
-//                appUser.setRole(new UserRole("7c3521f5-ff75-4e8a-9913-01d15ee4dc98","EMPLOYEE"));
-//            }
-//        }
-//
-//        userDAO.update(appUser);
-//
-//        return appUser;
-//    }
-//
+
     public boolean isUserValid(AppUser appUser) {
 
         // First name and last name are not just empty strings or filled with whitespace
@@ -247,6 +195,4 @@ public class UserService {
     public boolean isEmailAvailable(String email) {
         return userRepo.findByEmail(email) == null;
     }
-
 }
-
